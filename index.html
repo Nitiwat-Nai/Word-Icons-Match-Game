@@ -1,0 +1,637 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Icons Match 🧠</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- GLOBAL THEME SETUP --- */
+        :root {
+            /* Fallback Colors (L1-L3: Blue Theme) */
+            --color-primary: #1976D2; /* Dark Blue */
+            --color-secondary: #00BCD4; /* Cyan/Accent */
+            --color-card-front: #BBDEFB; /* Light Blue */
+            --color-card-back: #1976D2; /* Dark Blue for card back */
+            --color-text-light: #FFFFFF;
+            
+            --color-correct: #8BC34A; /* Lime Green */
+            --color-wrong: #F44336; /* Red */
+            --color-bg: #E3F2FD; /* Lighter Blue Background */
+            --color-text-dark: #263238;
+        }
+        
+        /* Level 4-6 Theme: Pink/Violet */
+        .level-4-6-theme {
+            --color-primary: #8E24AA; /* Dark Violet */
+            --color-secondary: #FF4081; /* Pink/Accent */
+            --color-card-front: #F8BBD0; /* Light Pink */
+            --color-card-back: #8E24AA; /* Dark Violet for card back */
+            --color-bg: #FCE4EC; /* Lighter Pink Background */
+        }
+        
+        /* Level 7-10 Theme: Yellow/Orange */
+        .level-7-10-theme {
+            --color-primary: #FF9800; /* Orange */
+            --color-secondary: #FFEB3B; /* Yellow/Accent */
+            --color-card-front: #FFE0B2; /* Light Orange */
+            --color-card-back: #FF9800; /* Orange for card back */
+            --color-bg: #FFF3E0; /* Lighter Orange Background */
+        }
+
+
+        /* --- CONTAINER & BASE STYLES --- */
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+            background-color: #FFFFFF;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 0;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 1rem 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.5s; /* Smooth color transition */
+        }
+        header h1 { font-size: 1.8rem; margin: 0; } 
+        
+        /* Screen Management */
+        .screen {
+            padding: 1rem;
+            display: none; 
+            flex-grow: 1;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .screen.active { display: flex; }
+        
+        /* Status Bar */
+        .status-bar {
+             display: flex;
+             justify-content: space-around;
+             padding: 10px 0;
+             font-weight: bold;
+             font-size: 1rem;
+             color: var(--color-primary);
+             transition: color 0.5s;
+        }
+        
+        /* Level Selection Grid */
+        #level-grid-select {
+             display: grid;
+             grid-template-columns: repeat(2, 1fr);
+             gap: 15px;
+             padding: 1rem 0;
+        }
+
+        /* --- Card Grid and Card Styles --- */
+        #game-grid {
+            width: 95%;
+            margin: 1rem auto;
+            display: grid;
+            gap: 10px;
+        }
+
+        .card {
+            height: 80px; 
+            perspective: 1000px; 
+            cursor: pointer;
+            transition: transform 0.6s;
+        }
+
+        /* Card Flip Animation */
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            font-weight: 700;
+            padding: 5px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .card-back {
+            background-color: var(--color-card-back);
+            color: var(--color-text-light);
+            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.2) 0px, rgba(255,255,255,.2) 1px, transparent 1px, transparent 10px);
+            border: 3px solid var(--color-primary);
+            font-size: 1.5rem;
+        }
+
+        .card-front {
+            background-color: var(--color-card-front);
+            color: var(--color-text-dark);
+            transform: rotateY(180deg);
+            border: 3px solid var(--color-secondary);
+            font-size: 1.1rem; /* For words */
+        }
+        
+        /* Icon styling */
+        .card-content-icon {
+            font-size: 2.5rem; /* Larger for icons */
+        }
+        
+        /* Matched State */
+        .card.matched .card-inner {
+            box-shadow: 0 0 15px var(--color-correct);
+            opacity: 0.5;
+            cursor: default;
+        }
+        .card.matched .card-front {
+             border-color: var(--color-correct);
+        }
+
+        /* --- Control Button Styles --- */
+        .control-btn {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            border: none;
+            padding: 1rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 0 var(--color-primary); 
+            transition: all 0.1s, background-color 0.5s, box-shadow 0.5s;
+            width: 100%; 
+        }
+
+        .control-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--color-primary);
+        }
+        
+        #game-controls {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        /* Control Groups */
+        #play-controls {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        #play-controls .control-btn {
+            width: 50%;
+        }
+
+        #end-game-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .success-btn {
+            background-color: var(--color-correct);
+            box-shadow: 0 4px 0 #558B2F;
+        }
+        
+        .secondary-btn {
+            background-color: #607D8B; 
+            box-shadow: 0 4px 0 #455A64;
+        }
+
+        /* Message Area */
+        #message-area {
+            min-height: 2rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            color: var(--color-secondary);
+            transition: color 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <header id="game-header">
+            <h1>Word Icons Match 🧠</h1>
+        </header>
+
+        <div id="level-select-screen" class="screen active">
+            <h2>เลือกชุดคำศัพท์ (10 Levels)</h2>
+            <p>จับคู่คำศัพท์กับไอคอนที่เข้ากันให้ถูกต้องและเร็วที่สุด</p>
+            <div id="level-grid-select">
+                </div>
+        </div>
+        
+        <div id="game-screen" class="screen">
+            <div class="status-bar">
+                <span id="level-info">Level 1: 3x4</span>
+                <span id="flips">การเปิดไพ่: 0 ครั้ง</span>
+                <span id="timer">เวลา: 0.00 วินาที</span>
+            </div>
+            
+            <div id="game-grid">
+                </div>
+            
+            <div id="message-area"></div>
+            
+            <div id="game-controls">
+                <div id="play-controls" style="display: flex;">
+                    <button id="main-menu-btn-play" class="control-btn secondary-btn">กลับหน้าหลัก 🏠</button>
+                    </div>
+
+                <div id="end-game-controls" style="display: none; margin-top: 10px;">
+                    <button id="play-again-btn" class="control-btn success-btn">เล่นใหม่ (ชุดนี้) 🔄</button>
+                    <button id="next-level-btn" class="control-btn">Level ถัดไป ▶️</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: 10 Levels using Basic Emojis ---
+        const allWords = [
+            // Level 1: 3x4 Grid (6 Pairs, 12 Cards) - Basic Nouns
+            { level: 1, gridSize: '3x4', words: [
+                { word: "CAT", icon: "🐱", matchId: 1 }, { word: "DOG", icon: "🐶", matchId: 2 }, { word: "CAR", icon: "🚗", matchId: 3 },
+                { word: "SUN", icon: "☀️", matchId: 4 }, { word: "TREE", icon: "🌳", matchId: 5 }, { word: "BALL", icon: "⚽", matchId: 6 }
+            ]},
+            
+            // Level 2: 4x4 Grid (8 Pairs, 16 Cards) - Colors/Food
+            { level: 2, gridSize: '4x4', words: [
+                { word: "APPLE", icon: "🍎", matchId: 7 }, { word: "BANANA", icon: "🍌", matchId: 8 }, { word: "RED", icon: "🔴", matchId: 9 },
+                { word: "BLUE", icon: "🔵", matchId: 10 }, { word: "HOUSE", icon: "🏠", matchId: 11 }, { word: "CLOCK", icon: "⏰", matchId: 12 },
+                { word: "BOOK", icon: "📚", matchId: 13 }, { word: "STAR", icon: "⭐", matchId: 14 }
+            ]},
+
+            // Level 3: 4x4 Grid (8 Pairs, 16 Cards) - Actions/Verbs (Icon Representation)
+            { level: 3, gridSize: '4x4', words: [
+                { word: "WALK", icon: "🚶", matchId: 15 }, { word: "RUN", icon: "🏃", matchId: 16 }, { word: "SIT", icon: "🪑", matchId: 17 },
+                { word: "SLEEP", icon: "😴", matchId: 18 }, { word: "DRINK", icon: "🥛", matchId: 19 }, { word: "EAT", icon: "🍽️", matchId: 20 },
+                { word: "GIFT", icon: "🎁", matchId: 21 }, { word: "LOVE", icon: "❤️", matchId: 22 }
+            ]},
+
+            // Level 4: 4x5 Grid (10 Pairs, 20 Cards) - Abstract/Feelings
+            { level: 4, gridSize: '4x5', words: [
+                { word: "HAPPY", icon: "😊", matchId: 23 }, { word: "SAD", icon: "😔", matchId: 24 }, { word: "SHOCK", icon: "😲", matchId: 25 },
+                { word: "IDEA", icon: "💡", matchId: 26 }, { word: "MONEY", icon: "💰", matchId: 27 }, { word: "TICKET", icon: "🎫", matchId: 28 },
+                { word: "PEN", icon: "🖊️", matchId: 29 }, { word: "KEY", icon: "🔑", matchId: 30 }, { word: "CUP", icon: "☕", matchId: 31 }, { word: "FLAG", icon: "🚩", matchId: 32 }
+            ]},
+            
+            // Level 5: 4x5 Grid (10 Pairs, 20 Cards) - Nature/Weather
+            { level: 5, gridSize: '4x5', words: [
+                { word: "WATER", icon: "💧", matchId: 33 }, { word: "FIRE", icon: "🔥", matchId: 34 }, { word: "CLOUD", icon: "☁️", matchId: 35 },
+                { word: "RAIN", icon: "🌧️", matchId: 36 }, { word: "SNOW", icon: "❄️", matchId: 37 }, { word: "FLOWER", icon: "🌸", matchId: 38 },
+                { word: "MOUNTAIN", icon: "⛰️", matchId: 39 }, { word: "MOON", icon: "🌕", matchId: 40 }, { word: "ROAD", icon: "🛣️", matchId: 41 }, { word: "BOAT", icon: "⛵", matchId: 42 }
+            ]},
+
+            // Level 6: 4x5 Grid (10 Pairs, 20 Cards) - Professions/People
+            { level: 6, gridSize: '4x5', words: [
+                { word: "DOCTOR", icon: "🧑‍⚕️", matchId: 43 }, { word: "POLICE", icon: "👮", matchId: 44 }, { word: "STUDENT", icon: "🧑‍🎓", matchId: 45 },
+                { word: "CHEF", icon: "🧑‍🍳", matchId: 46 }, { word: "KING", icon: "👑", matchId: 47 }, { word: "FAMILY", icon: "👪", matchId: 48 },
+                { word: "BABY", icon: "👶", matchId: 49 }, { word: "HAND", icon: "✋", matchId: 50 }, { word: "EYE", icon: "👁️", matchId: 51 }, { word: "EAR", icon: "👂", matchId: 52 }
+            ]},
+            
+            // Level 7: 5x4 Grid (10 Pairs, 20 Cards) - Mixed & Extended Basic
+            { level: 7, gridSize: '5x4', words: [
+                { word: "DESK", icon: "🖥️", matchId: 53 }, { word: "MOUSE", icon: "🖱️", matchId: 54 }, { word: "EMAIL", icon: "📧", matchId: 55 },
+                { word: "CALENDAR", icon: "📅", matchId: 56 }, { word: "TRUCK", icon: "🚚", matchId: 57 }, { word: "BUS", icon: "🚌", matchId: 58 },
+                { word: "WINE", icon: "🍷", matchId: 59 }, { word: "BEER", icon: "🍺", matchId: 60 }, { word: "PIZZA", icon: "🍕", matchId: 61 }, { word: "SHIRT", icon: "👕", matchId: 62 }
+            ]},
+
+            // Level 8: 5x4 Grid (10 Pairs, 20 Cards) - Advanced Basic Objects
+            { level: 8, gridSize: '5x4', words: [
+                { word: "CAMERA", icon: "📷", matchId: 63 }, { word: "VIDEO", icon: "📹", matchId: 64 }, { word: "NOTE", icon: "📝", matchId: 65 },
+                { word: "CALCULATE", icon: "🧮", matchId: 66 }, { word: "GLOBE", icon: "🌍", matchId: 67 }, { word: "BAG", icon: "👜", matchId: 68 },
+                { word: "BIKE", icon: "🚲", matchId: 69 }, { word: "TRAIN", icon: "🚂", matchId: 70 }, { word: "TENT", icon: "⛺", matchId: 71 }, { word: "WIFI", icon: "📶", matchId: 72 }
+            ]},
+            
+            // Level 9: 5x5 Grid (12 Pairs, 24 Cards) - Increased Difficulty
+            { level: 9, gridSize: '5x5', words: [
+                { word: "LOCK", icon: "🔒", matchId: 73 }, { word: "UNLOCK", icon: "🔓", matchId: 74 }, { word: "ARROW", icon: "⬆️", matchId: 75 },
+                { word: "DOWN", icon: "⬇️", matchId: 76 }, { word: "PLUS", icon: "➕", matchId: 77 }, { word: "MINUS", icon: "➖", matchId: 78 },
+                { word: "WAVE", icon: "🌊", matchId: 79 }, { word: "HELICOPTER", icon: "🚁", matchId: 80 }, { word: "FIREWORKS", icon: "🎆", matchId: 81 },
+                { word: "DIAMOND", icon: "💎", matchId: 82 }, { word: "TROPHY", icon: "🏆", matchId: 83 }, { word: "GRADUATION", icon: "🎓", matchId: 84 }
+            ]},
+            
+            // Level 10: 6x4 Grid (12 Pairs, 24 Cards) - Max Size
+            { level: 10, gridSize: '6x4', words: [
+                { word: "SMILE", icon: "😀", matchId: 85 }, { word: "CRY", icon: "😭", matchId: 86 }, { word: "ANGRY", icon: "😡", matchId: 87 },
+                { word: "KISS", icon: "💋", matchId: 88 }, { word: "SPEECH", icon: "💬", matchId: 89 }, { word: "CAMERA", icon: "📸", matchId: 90 },
+                { word: "MIC", icon: "🎤", matchId: 91 }, { word: "HEADPHONE", icon: "🎧", matchId: 92 }, { word: "ZAP", icon: "⚡", matchId: 93 },
+                { word: "HUG", icon: "🫂", matchId: 94 }, { word: "DOOR", icon: "🚪", matchId: 95 }, { word: "BINOCULAR", icon: "🔭", matchId: 96 }
+            ]}
+        ];
+
+        // --- GAME STATE ---
+        let currentLevel = null;
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let totalFlips = 0;
+        let score = 0;
+        let gameLocked = false; 
+        let timerInterval = null;
+        let timeElapsed = 0;
+
+        // --- ELEMENTS ---
+        const mainContainerEl = document.getElementById('main-container');
+        const gameHeaderEl = document.getElementById('game-header');
+        const levelSelectScreen = document.getElementById('level-select-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const gameGridEl = document.getElementById('game-grid');
+        const levelInfoEl = document.getElementById('level-info');
+        const flipsEl = document.getElementById('flips');
+        const timerEl = document.getElementById('timer');
+        const messageAreaEl = document.getElementById('message-area');
+        const endGameControlsEl = document.getElementById('end-game-controls');
+        const nextLevelBtn = document.getElementById('next-level-btn');
+        const levelGridSelectEl = document.getElementById('level-grid-select');
+        
+        // --- UTILITY ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(id).classList.add('active');
+        }
+
+        // --- COLOR THEME MANAGEMENT ---
+        function applyLevelTheme(level) {
+            mainContainerEl.classList.remove('level-4-6-theme', 'level-7-10-theme');
+            
+            if (level >= 4 && level <= 6) {
+                mainContainerEl.classList.add('level-4-6-theme');
+            } else if (level >= 7 && level <= 10) {
+                mainContainerEl.classList.add('level-7-10-theme');
+            }
+            // Levels 1-3 use default (Blue) theme
+        }
+
+        // --- TIMER LOGIC ---
+        function startTimer() {
+            stopTimer(); 
+            timeElapsed = 0;
+            timerEl.textContent = `เวลา: 0.00 วินาที`;
+            timerInterval = setInterval(() => {
+                timeElapsed += 0.1;
+                timerEl.textContent = `เวลา: ${timeElapsed.toFixed(2)} วินาที`;
+            }, 100);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+        
+        // --- GAME FLOW ---
+        
+        function createLevelButtons() {
+             levelGridSelectEl.innerHTML = '';
+             allWords.forEach(data => {
+                const btn = document.createElement('button');
+                btn.className = 'control-btn';
+                btn.textContent = `Level ${data.level}: ${data.gridSize} (${data.words.length} คู่)`;
+                btn.setAttribute('data-level', data.level);
+                
+                // Adjust button color based on level theme
+                if (data.level >= 4 && data.level <= 6) {
+                    btn.style.backgroundColor = '#8E24AA'; // Dark Violet
+                    btn.style.boxShadow = '0 4px 0 #6A1B9A';
+                } else if (data.level >= 7 && data.level <= 10) {
+                    btn.style.backgroundColor = '#FF9800'; // Orange
+                    btn.style.boxShadow = '0 4px 0 #F57C00';
+                }
+                
+                btn.addEventListener('click', (e) => {
+                    startGame(parseInt(e.target.getAttribute('data-level')));
+                });
+                levelGridSelectEl.appendChild(btn);
+             });
+        }
+
+        function setupCards(levelData) {
+            const allItems = [];
+            
+            // Create all card content (Word + Icon)
+            levelData.words.forEach(item => {
+                // Word Card
+                allItems.push({ content: item.word.toUpperCase(), type: 'word', matchId: item.matchId, isMatched: false });
+                // Icon Card
+                allItems.push({ content: item.icon, type: 'icon', matchId: item.matchId, isMatched: false, isIcon: true });
+            });
+
+            // Shuffle and set up grid
+            cards = shuffleArray(allItems);
+            gameGridEl.innerHTML = '';
+            
+            const [rows, cols] = levelData.gridSize.split('x').map(Number);
+            gameGridEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+            gameGridEl.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+            
+            // Render cards
+            cards.forEach((card, index) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card';
+                cardEl.setAttribute('data-index', index);
+                cardEl.addEventListener('click', handleCardClick);
+
+                const inner = document.createElement('div');
+                inner.className = 'card-inner';
+
+                const front = document.createElement('div');
+                front.className = 'card-front';
+                
+                const contentSpan = document.createElement('span');
+                contentSpan.textContent = card.content;
+                if (card.isIcon) {
+                    contentSpan.className = 'card-content-icon';
+                }
+                front.appendChild(contentSpan);
+
+                const back = document.createElement('div');
+                back.className = 'card-back';
+                back.textContent = "?"; 
+
+                inner.appendChild(front);
+                inner.appendChild(back);
+                cardEl.appendChild(inner);
+                gameGridEl.appendChild(cardEl);
+            });
+        }
+        
+        function startGame(level) {
+            currentLevel = level;
+            const levelData = allWords.find(d => d.level === level);
+
+            if (!levelData) {
+                console.error("Level data not found:", level);
+                return;
+            }
+            
+            applyLevelTheme(level);
+
+            matchedPairs = 0;
+            totalFlips = 0;
+            score = 0;
+            updateStats();
+            messageAreaEl.textContent = "";
+            endGameControlsEl.style.display = 'none';
+            nextLevelBtn.style.display = 'block'; 
+
+            levelInfoEl.textContent = `Level ${level}: ${levelData.gridSize}`;
+            
+            setupCards(levelData);
+            showScreen('game-screen');
+            startTimer();
+        }
+
+        function updateStats() {
+            // Note: Keeping score simple as 100 points per match
+            flipsEl.textContent = `การเปิดไพ่: ${totalFlips} ครั้ง`;
+        }
+
+        function handleCardClick(event) {
+            if (gameLocked) return;
+            const cardEl = event.currentTarget;
+            const cardIndex = parseInt(cardEl.getAttribute('data-index'));
+            const cardData = cards[cardIndex];
+
+            if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+            
+            cardEl.classList.add('flipped');
+            flippedCards.push({ cardEl, cardData });
+            
+            if (flippedCards.length === 2) {
+                gameLocked = true;
+                totalFlips++;
+                updateStats();
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            const card1 = flippedCards[0].cardData;
+            const card2 = flippedCards[1].cardData;
+            const card1El = flippedCards[0].cardEl;
+            const card2El = flippedCards[1].cardEl;
+            
+            // Match condition: same matchId AND different types (Word vs Icon)
+            const isMatch = (card1.matchId === card2.matchId) && (card1.type !== card2.type);
+
+            if (isMatch) {
+                // Correct Match
+                score += 1; // Simple count of pairs
+                matchedPairs++;
+                messageAreaEl.textContent = `🎉 เยี่ยม! คู่ที่ ${matchedPairs}/${allWords.find(d => d.level === currentLevel).words.length} สำเร็จ!`;
+                messageAreaEl.style.color = 'var(--color-correct)';
+                
+                setTimeout(() => {
+                    card1El.classList.add('matched');
+                    card2El.classList.add('matched');
+                    gameLocked = false;
+                    flippedCards = [];
+                    checkWinCondition();
+                }, 800);
+                
+            } else {
+                // Incorrect Match
+                messageAreaEl.textContent = `❌ ผิดพลาด! ลองใหม่อีกครั้ง`;
+                messageAreaEl.style.color = 'var(--color-wrong)';
+                
+                // Flip cards back after a delay
+                setTimeout(() => {
+                    card1El.classList.remove('flipped');
+                    card2El.classList.remove('flipped');
+                    gameLocked = false;
+                    flippedCards = [];
+                }, 1200);
+            }
+        }
+
+        function checkWinCondition() {
+            const currentLevelData = allWords.find(d => d.level === currentLevel);
+            const totalPairs = currentLevelData ? currentLevelData.words.length : 0;
+            
+            if (matchedPairs === totalPairs) {
+                stopTimer();
+                messageAreaEl.textContent = `🏆 ชนะแล้ว! ใช้เวลา ${timeElapsed.toFixed(2)} วินาที และเปิดไพ่ ${totalFlips} ครั้ง!`;
+                messageAreaEl.style.fontSize = '1.2rem';
+                
+                endGameControlsEl.style.display = 'flex';
+                
+                // If it was the final level, hide the 'Next Level' button
+                if (currentLevel === allWords.length) {
+                    nextLevelBtn.style.display = 'none';
+                    messageAreaEl.textContent += ` (คุณเล่นครบทุก Level แล้ว!)`;
+                } else {
+                    nextLevelBtn.style.display = 'block';
+                }
+            }
+        }
+        
+        function goToLevelSelect() {
+            stopTimer();
+            showScreen('level-select-screen');
+        }
+
+        // --- INITIAL SETUP ---
+        document.addEventListener('DOMContentLoaded', () => {
+            createLevelButtons();
+
+            // Bind Control Buttons
+            document.getElementById('main-menu-btn-play').addEventListener('click', goToLevelSelect);
+            document.getElementById('play-again-btn').addEventListener('click', () => {
+                startGame(currentLevel); 
+            });
+            document.getElementById('next-level-btn').addEventListener('click', () => {
+                if (currentLevel < allWords.length) {
+                    startGame(currentLevel + 1);
+                } else {
+                    goToLevelSelect(); // If somehow clicked on max level
+                }
+            });
+
+            showScreen('level-select-screen');
+        });
+    </script>
+</body>
+</html>
