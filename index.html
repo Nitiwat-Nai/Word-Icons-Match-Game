@@ -38,6 +38,15 @@
             --color-card-back: #FF9800; 
             --color-bg: #FFF3E0; /* Lighter Orange Background */
         }
+        
+        /* Level 11-12 Theme: Green/Teal (New Theme) */
+        .level-11-12-theme {
+            --color-primary: #00796B; /* Dark Teal */
+            --color-secondary: #4DB6AC; /* Light Teal/Accent */
+            --color-card-front: #B2DFDB; /* Light Green-Blue */
+            --color-card-back: #00796B; 
+            --color-bg: #E0F2F1; /* Lighter Teal Background */
+        }
 
         /* --- CONTAINER & BASE STYLES --- */
         body {
@@ -98,8 +107,9 @@
         }
         
         #level-grid-select {
+             /* ปรับเป็น 3 คอลัมน์สำหรับ 12 เลเวลเพื่อให้ดูดีขึ้น */
              display: grid;
-             grid-template-columns: repeat(2, 1fr);
+             grid-template-columns: repeat(3, 1fr); 
              gap: 15px;
              padding: 0.5rem 0;
         }
@@ -217,15 +227,15 @@
         }
         #game-controls { margin-top: 1rem; width: 100%; }
         
-        /* ปุ่มกลับหน้าหลักและเล่นใหม่ มีขนาดเท่ากัน */
+        /* **แก้ไขที่ 1: ปุ่มกลับหน้าหลักเดี่ยว (ขณะเล่น)** */
         #play-controls { 
             display: flex; 
             gap: 10px; 
             width: 100%; 
         }
-        /* กำหนดให้ปุ่มทั้งสองมีขนาดเท่ากัน (50%) */
+        /* กำหนดให้ปุ่ม "กลับหน้าหลัก" มีขนาดเต็ม (100%) เมื่ออยู่ปุ่มเดียว */
         #play-controls .control-btn { 
-            width: 50%; 
+            width: 100%; 
         }
         
         #end-game-controls { 
@@ -264,7 +274,7 @@
         </header>
 
         <div id="level-select-screen" class="screen active">
-            <h2>เลือกชุดคำศัพท์ (10 Levels)</h2>
+            <h2>เลือกชุดคำศัพท์ (12 Levels)</h2>
             <p>จับคู่คำศัพท์กับไอคอนที่เข้ากันให้ถูกต้องและเร็วที่สุด</p>
             <div id="level-grid-select">
                 </div>
@@ -285,19 +295,19 @@
             <div id="game-controls">
                 <div id="play-controls" style="display: flex;">
                     <button id="main-menu-btn-play" class="control-btn secondary-btn">กลับหน้าหลัก 🏠</button>
-                    <button id="dummy-btn-play" class="control-btn secondary-btn" style="background-color: transparent; border: 1px solid #607D8B; color: #607D8B; box-shadow: none;" disabled>เล่น...</button> 
                 </div>
 
                 <div id="end-game-controls" style="display: none; margin-top: 10px;">
                     <button id="play-again-btn" class="control-btn success-btn">เล่นใหม่ (ชุดนี้) 🔄</button>
                     <button id="next-level-btn" class="control-btn">Level ถัดไป ▶️</button>
-                    <button id="main-menu-btn-end" class="control-btn secondary-btn">กลับหน้าหลัก 🏠</button> </div>
+                    <button id="main-menu-btn-end" class="control-btn secondary-btn">กลับหน้าหลัก 🏠</button> 
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- DATA: 60 Pairs for 10 Levels (4 คอลัมน์คงที่) ---
+        // --- DATA: 84 Pairs for 12 Levels (4 คอลัมน์คงที่) ---
         const ALL_WORDS_DATA = [
             // L1-L4: 4x3 (6 Pairs x 4 Levels = 24 Pairs)
             // L1
@@ -337,14 +347,26 @@
             { word: "SHIRT", icon: "👕", matchId: 60 }, { word: "CAMERA", icon: "📷", matchId: 61 }, { word: "VIDEO", icon: "📹", matchId: 62 }, 
             { word: "NOTE", icon: "📝", matchId: 63 }, { word: "CALCULATE", icon: "🧮", matchId: 64 }, { word: "GLOBE", icon: "🌍", matchId: 65 }, 
             { word: "BAG", icon: "👜", matchId: 66 },
-            // L10 (คำศัพท์ใหม่ 4 คู่ถูกเพิ่มเข้ามา)
+            // L10 
             { word: "BIKE", icon: "🚲", matchId: 67 }, { word: "TRAIN", icon: "🚂", matchId: 68 }, { word: "TENT", icon: "⛺", matchId: 69 }, 
             { word: "WIFI", icon: "📶", matchId: 70 }, { word: "LOCK", icon: "🔒", matchId: 71 }, { word: "UNLOCK", icon: "🔓", matchId: 72 },
             { word: "ARROW", icon: "⬆️", matchId: 73 }, { word: "DOWN", icon: "⬇️", matchId: 74 }, { word: "PLUS", icon: "➕", matchId: 75 }, 
-            { word: "MINUS", icon: "➖", matchId: 76 }
+            { word: "MINUS", icon: "➖", matchId: 76 },
+            
+            // L11-L12: 4x6 (12 Pairs x 2 Levels = 24 Pairs) - NEW WORDS ADDED
+            // L11
+            { word: "KEYBOARD", icon: "⌨️", matchId: 77 }, { word: "PRINTER", icon: "🖨️", matchId: 78 }, { word: "MUTE", icon: "🔇", matchId: 79 }, 
+            { word: "VOLUME", icon: "🔊", matchId: 80 }, { word: "LIGHT", icon: "💡", matchId: 81 }, { word: "DARK", icon: "🌑", matchId: 82 }, 
+            { word: "CHAIR", icon: "🪑", matchId: 83 }, { word: "TABLE", icon: "🪚", matchId: 84 }, { word: "EARTH", icon: "🌎", matchId: 85 }, 
+            { word: "MARS", icon: "🔴", matchId: 86 }, { word: "RING", icon: "💍", matchId: 87 }, { word: "DIAMOND", icon: "💎", matchId: 88 },
+            // L12
+            { word: "SHIELD", icon: "🛡️", matchId: 89 }, { word: "SWORD", icon: "⚔️", matchId: 90 }, { word: "CROWN", icon: "👑", matchId: 91 }, 
+            { word: "CASTLE", icon: "🏰", matchId: 92 }, { word: "GHOST", icon: "👻", matchId: 93 }, { word: "WITCH", icon: "🧙", matchId: 94 },
+            { word: "ZOMBIE", icon: "🧟", matchId: 95 }, { word: "VAMPIRE", icon: "🧛", matchId: 96 }, { word: "ROBOT", icon: "🤖", matchId: 97 }, 
+            { word: "ALIEN", icon: "👽", matchId: 98 }, { word: "FIREMAN", icon: "👨‍🚒", matchId: 99 }, { word: "PILOT", icon: "🧑‍✈️", matchId: 100 } 
         ];
         
-        // จัดกลุ่มคำศัพท์ 60 คู่ (120 การ์ด) ใหม่เป็น 10 Levels
+        // จัดกลุ่มคำศัพท์ 84 คู่ (168 การ์ด) ใหม่เป็น 12 Levels
         const newLevels = [
             { level: 1, gridSize: '4x3', words: ALL_WORDS_DATA.slice(0, 6) },
             { level: 2, gridSize: '4x3', words: ALL_WORDS_DATA.slice(6, 12) },
@@ -357,7 +379,10 @@
             { level: 8, gridSize: '4x4', words: ALL_WORDS_DATA.slice(48, 56) },
             
             { level: 9, gridSize: '4x5', words: ALL_WORDS_DATA.slice(56, 66) },
-            { level: 10, gridSize: '4x5', words: ALL_WORDS_DATA.slice(66, 76) }
+            { level: 10, gridSize: '4x5', words: ALL_WORDS_DATA.slice(66, 76) },
+            
+            { level: 11, gridSize: '4x6', words: ALL_WORDS_DATA.slice(76, 88) }, /* New Level 11 (12 Pairs) */
+            { level: 12, gridSize: '4x6', words: ALL_WORDS_DATA.slice(88, 100) }  /* New Level 12 (12 Pairs) */
         ];
 
         // --- GAME STATE & ELEMENTS ---
@@ -384,7 +409,6 @@
         const endGameControlsEl = document.getElementById('end-game-controls');
         const nextLevelBtn = document.getElementById('next-level-btn');
         const levelGridSelectEl = document.getElementById('level-grid-select');
-        const dummyBtnPlay = document.getElementById('dummy-btn-play');
         const mainMenuBtnEnd = document.getElementById('main-menu-btn-end');
         
         // --- SPEECH & SOUND FUNCTIONS (ไม่เปลี่ยนแปลง) ---
@@ -496,7 +520,7 @@
                 let btnBgColor;
                 let btnShadowColor;
                 
-                // สีปุ่ม Level: L1-L4 (Blue), L5-L8 (Violet), L9-L10 (Orange)
+                // สีปุ่ม Level: L1-L4 (Blue), L5-L8 (Violet), L9-L10 (Orange), L11-L12 (Teal)
                 if (data.level >= 1 && data.level <= 4) {
                     btnBgColor = '#1976D2'; 
                     btnShadowColor = '#1565C0'; 
@@ -506,6 +530,9 @@
                 } else if (data.level >= 9 && data.level <= 10) {
                     btnBgColor = '#FF9800'; 
                     btnShadowColor = '#F57C00';
+                } else if (data.level >= 11 && data.level <= 12) {
+                    btnBgColor = '#00796B'; 
+                    btnShadowColor = '#004D40'; 
                 }
 
                 btn.style.backgroundColor = btnBgColor;
@@ -577,14 +604,16 @@
         // --- GAME FLOW ---
         
         function applyLevelTheme(level) {
-            mainContainerEl.classList.remove('level-5-8-theme', 'level-9-10-theme');
-            // ธีมใหม่: L1-L4 (Blue), L5-L8 (Violet), L9-L10 (Orange)
+            mainContainerEl.classList.remove('level-5-8-theme', 'level-9-10-theme', 'level-11-12-theme');
+            // ธีมใหม่: L1-L4 (Blue), L5-L8 (Violet), L9-L10 (Orange), L11-L12 (Teal)
             if (level >= 5 && level <= 8) {
                 mainContainerEl.classList.add('level-5-8-theme');
             } else if (level >= 9 && level <= 10) {
                 mainContainerEl.classList.add('level-9-10-theme');
+            } else if (level >= 11 && level <= 12) {
+                mainContainerEl.classList.add('level-11-12-theme');
             } else {
-                 mainContainerEl.classList.remove('level-5-8-theme', 'level-9-10-theme');
+                 mainContainerEl.classList.remove('level-5-8-theme', 'level-9-10-theme', 'level-11-12-theme');
             }
         }
         
@@ -603,10 +632,11 @@
             messageAreaEl.textContent = "";
             messageAreaEl.style.fontSize = '1rem';
             
-            // **แก้ไข:** ซ่อน control เมื่อเกมเริ่ม
+            // **แก้ไข:** ซ่อน end-game-controls และแสดง play-controls
             endGameControlsEl.style.display = 'none';
             document.getElementById('play-controls').style.display = 'flex';
-            dummyBtnPlay.style.display = 'block'; 
+            
+            // ปรับขนาดปุ่มกลับหน้าหลักให้เต็ม 100% (CSS จัดการแล้ว)
             
             // ซ่อนปุ่ม Next Level ถ้าถึง Level สุดท้าย
             if (currentLevel === newLevels.length) {
@@ -723,11 +753,6 @@
                 document.getElementById('play-controls').style.display = 'none';
                 endGameControlsEl.style.display = 'flex';
                 
-                // **แก้ไข:** ปุ่มเล่นใหม่ (ชุดนี้) และ Level ถัดไป
-                document.getElementById('play-again-btn').style.width = '100%';
-                nextLevelBtn.style.width = '100%';
-                mainMenuBtnEnd.style.width = '100%';
-                
                 if (currentLevel === newLevels.length) {
                     nextLevelBtn.style.display = 'none';
                     messageAreaEl.textContent += ` (คุณเล่นครบทุก Level แล้ว!)`;
@@ -735,7 +760,7 @@
                     nextLevelBtn.style.display = 'block';
                 }
                 
-                // **แก้ไข:** แสดงปุ่มกลับหน้าหลักที่ซ่อนไว้
+                // แสดงปุ่มกลับหน้าหลักเมื่อจบเกม
                 mainMenuBtnEnd.style.display = 'block';
             }
         }
@@ -748,7 +773,7 @@
             // Bind Control Buttons
             document.getElementById('main-menu-btn-play').addEventListener('click', goToLevelSelect);
             
-            // **แก้ไข:** ปุ่มกลับหน้าหลักเมื่อจบเกม
+            // Bind ปุ่มกลับหน้าหลักเมื่อจบเกม
             document.getElementById('main-menu-btn-end').addEventListener('click', goToLevelSelect); 
             
             document.getElementById('play-again-btn').addEventListener('click', () => {
