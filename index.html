@@ -217,7 +217,7 @@
         }
         #game-controls { margin-top: 1rem; width: 100%; }
         
-        /* **แก้ไขตามคำขอที่ 2: ปุ่มกลับหน้าหลักและเล่นใหม่ มีขนาดเท่ากัน** */
+        /* ปุ่มกลับหน้าหลักและเล่นใหม่ มีขนาดเท่ากัน */
         #play-controls { 
             display: flex; 
             gap: 10px; 
@@ -234,7 +234,7 @@
             gap: 10px; 
             width: 100%; 
         }
-        /* ปุ่มกลับหน้าหลักเมื่อจบเกมจะถูกแยกไปอยู่ข้างล่างปุ่มเล่นซ้ำ */
+        /* ปุ่มทั้งหมดเมื่อจบเกมมีขนาด 100% */
         #end-game-controls .control-btn { 
             width: 100%; 
         }
@@ -291,8 +291,7 @@
                 <div id="end-game-controls" style="display: none; margin-top: 10px;">
                     <button id="play-again-btn" class="control-btn success-btn">เล่นใหม่ (ชุดนี้) 🔄</button>
                     <button id="next-level-btn" class="control-btn">Level ถัดไป ▶️</button>
-                    <button id="main-menu-btn-end" class="control-btn secondary-btn">กลับหน้าหลัก 🏠</button> 
-                </div>
+                    <button id="main-menu-btn-end" class="control-btn secondary-btn">กลับหน้าหลัก 🏠</button> </div>
             </div>
         </div>
     </div>
@@ -603,8 +602,11 @@
             updateStats();
             messageAreaEl.textContent = "";
             messageAreaEl.style.fontSize = '1rem';
+            
+            // **แก้ไข:** ซ่อน control เมื่อเกมเริ่ม
             endGameControlsEl.style.display = 'none';
-            dummyBtnPlay.style.display = 'block'; // แสดงปุ่มหลอก
+            document.getElementById('play-controls').style.display = 'flex';
+            dummyBtnPlay.style.display = 'block'; 
             
             // ซ่อนปุ่ม Next Level ถ้าถึง Level สุดท้าย
             if (currentLevel === newLevels.length) {
@@ -612,7 +614,6 @@
             } else {
                  nextLevelBtn.style.display = 'block'; 
             }
-            mainMenuBtnEnd.style.display = 'block'; // แสดงปุ่มกลับหน้าหลักเมื่อจบเกม
             
             window.speechSynthesis.cancel(); 
 
@@ -718,9 +719,14 @@
                 messageAreaEl.style.fontSize = '1.2rem';
                 messageAreaEl.style.color = 'var(--color-primary)';
                 
+                // **แก้ไข:** ซ่อน play-controls และแสดง end-game-controls
+                document.getElementById('play-controls').style.display = 'none';
                 endGameControlsEl.style.display = 'flex';
-                // ซ่อนปุ่มหลอกใน play-controls
-                dummyBtnPlay.style.display = 'none';
+                
+                // **แก้ไข:** ปุ่มเล่นใหม่ (ชุดนี้) และ Level ถัดไป
+                document.getElementById('play-again-btn').style.width = '100%';
+                nextLevelBtn.style.width = '100%';
+                mainMenuBtnEnd.style.width = '100%';
                 
                 if (currentLevel === newLevels.length) {
                     nextLevelBtn.style.display = 'none';
@@ -728,6 +734,9 @@
                 } else {
                     nextLevelBtn.style.display = 'block';
                 }
+                
+                // **แก้ไข:** แสดงปุ่มกลับหน้าหลักที่ซ่อนไว้
+                mainMenuBtnEnd.style.display = 'block';
             }
         }
 
@@ -738,8 +747,9 @@
 
             // Bind Control Buttons
             document.getElementById('main-menu-btn-play').addEventListener('click', goToLevelSelect);
-            // Bind ปุ่มกลับหน้าหลักเมื่อจบเกม
-            mainMenuBtnEnd.addEventListener('click', goToLevelSelect); 
+            
+            // **แก้ไข:** ปุ่มกลับหน้าหลักเมื่อจบเกม
+            document.getElementById('main-menu-btn-end').addEventListener('click', goToLevelSelect); 
             
             document.getElementById('play-again-btn').addEventListener('click', () => {
                 startGame(currentLevel); 
