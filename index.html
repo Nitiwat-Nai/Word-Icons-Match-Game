@@ -9,34 +9,34 @@
         /* --- GLOBAL THEME SETUP --- */
         :root {
             /* Fallback Colors (L1-L3: Blue Theme) */
-            --color-primary: #1976D2; 
-            --color-secondary: #00BCD4; 
-            --color-card-front: #BBDEFB; 
+            --color-primary: #1976D2; /* Dark Blue */
+            --color-secondary: #00BCD4; /* Cyan/Accent */
+            --color-card-front: #BBDEFB; /* Light Blue */
             --color-card-back: #1976D2; 
             --color-text-light: #FFFFFF;
             
-            --color-correct: #8BC34A; 
-            --color-wrong: #F44336; 
-            --color-bg: #E3F2FD; 
+            --color-correct: #8BC34A; /* Lime Green */
+            --color-wrong: #F44336; /* Red */
+            --color-bg: #E3F2FD; /* Lighter Blue Background */
             --color-text-dark: #263238;
         }
         
         /* Level 4-6 Theme: Pink/Violet */
         .level-4-6-theme {
-            --color-primary: #8E24AA; 
-            --color-secondary: #FF4081; 
-            --color-card-front: #F8BBD0; 
+            --color-primary: #8E24AA; /* Dark Violet */
+            --color-secondary: #FF4081; /* Pink/Accent */
+            --color-card-front: #F8BBD0; /* Light Pink */
             --color-card-back: #8E24AA; 
-            --color-bg: #FCE4EC; 
+            --color-bg: #FCE4EC; /* Lighter Pink Background */
         }
         
         /* Level 7-10 Theme: Yellow/Orange */
         .level-7-10-theme {
-            --color-primary: #FF9800; 
-            --color-secondary: #FFEB3B; 
-            --color-card-front: #FFE0B2; 
+            --color-primary: #FF9800; /* Orange */
+            --color-secondary: #FFEB3B; /* Yellow/Accent */
+            --color-card-front: #FFE0B2; /* Light Orange */
             --color-card-back: #FF9800; 
-            --color-bg: #FFF3E0; 
+            --color-bg: #FFF3E0; /* Lighter Orange Background */
         }
 
         /* --- CONTAINER & BASE STYLES --- */
@@ -51,7 +51,7 @@
             align-items: center;
             min-height: 100vh;
             text-align: center;
-            overflow-x: hidden; /* Prevent horizontal scroll from shake */
+            overflow-x: hidden;
         }
 
         .container {
@@ -68,20 +68,6 @@
             transition: background-color 0.5s;
         }
 
-        /* --- SHAKE EFFECT (for wrong match) --- */
-        /* เอฟเฟกต์การสั่นเมื่อจับคู่ผิด */
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            20% { transform: translateX(-5px); }
-            40% { transform: translateX(5px); }
-            60% { transform: translateX(-5px); }
-            80% { transform: translateX(5px); }
-            100% { transform: translateX(0); }
-        }
-        .container.shake {
-            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
-
         header {
             background-color: var(--color-primary);
             color: var(--color-text-light);
@@ -91,12 +77,14 @@
         }
         header h1 { font-size: 1.8rem; margin: 0; } 
         
+        /* *************** แก้ไขตามคำขอที่ 1: จัดวางหน้าจอหลัก *************** */
         .screen {
             padding: 1rem;
             display: none; 
             flex-grow: 1;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start; /* เลื่อนเนื้อหาขึ้นด้านบน */
+            gap: 15px;
         }
         .screen.active { display: flex; }
 
@@ -114,7 +102,7 @@
              display: grid;
              grid-template-columns: repeat(2, 1fr);
              gap: 15px;
-             padding: 1rem 0;
+             padding: 0.5rem 0;
         }
 
         /* --- Card Grid and Card Styles --- */
@@ -142,10 +130,24 @@
             transform-style: preserve-3d;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 8px;
+            /* *************** ต้องมี position: relative เพื่อให้การสั่นทำงานได้ดี *************** */
+            position: relative; 
         }
 
+        /* *************** แก้ไขตามคำขอที่ 2: การสั่นคู่ไพ่ที่จับคู่ผิด *************** */
+        @keyframes card-shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-2px, 0) rotate(-1deg); }
+            30% { transform: translate(2px, 0) rotate(0deg); }
+            50% { transform: translate(-2px, 0) rotate(1deg); }
+            70% { transform: translate(2px, 0) rotate(-1deg); }
+            90% { transform: translate(-2px, 0) rotate(0deg); }
+        }
+        .card-inner.shake-error {
+            animation: card-shake 0.5s ease-in-out;
+        }
+        
         /* --- JUMP EFFECT (for correct match) --- */
-        /* เอฟเฟกต์การซูม/กระโดดเมื่อจับคู่ถูก */
         .card.matched-correct {
             animation: jump 0.8s ease-out;
         }
@@ -199,9 +201,8 @@
              border-color: var(--color-correct);
         }
 
-        /* Control Button Styles */
+        /* --- Control Button Styles --- */
         .control-btn {
-            background-color: var(--color-primary);
             color: var(--color-text-light);
             border: none;
             padding: 1rem;
@@ -209,13 +210,12 @@
             font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 0 var(--color-primary); 
             transition: all 0.1s, background-color 0.5s, box-shadow 0.5s;
             width: 100%; 
         }
         .control-btn:active {
             transform: translateY(2px);
-            box-shadow: 0 2px 0 var(--color-primary);
+            box-shadow: 0 2px 0 var(--color-primary) !important; /* ใช้ !important เพื่อ override box-shadow */
         }
         #game-controls { margin-top: 1rem; width: 100%; }
         #play-controls { display: flex; gap: 10px; width: 100%; }
@@ -280,61 +280,61 @@
     <script>
         // --- DATA: 10 Levels using Basic Emojis (unchanged) ---
         const allWords = [
-            // Level 1: 3x4 Grid (6 Pairs, 12 Cards) - Basic Nouns
+            // Level 1: 3x4 Grid (6 Pairs, 12 Cards)
             { level: 1, gridSize: '3x4', words: [
                 { word: "CAT", icon: "🐱", matchId: 1 }, { word: "DOG", icon: "🐶", matchId: 2 }, { word: "CAR", icon: "🚗", matchId: 3 },
                 { word: "SUN", icon: "☀️", matchId: 4 }, { word: "TREE", icon: "🌳", matchId: 5 }, { word: "BALL", icon: "⚽", matchId: 6 }
             ]},
-            // Level 2: 4x4 Grid (8 Pairs, 16 Cards) - Colors/Food
+            // Level 2: 4x4 Grid (8 Pairs, 16 Cards)
             { level: 2, gridSize: '4x4', words: [
                 { word: "APPLE", icon: "🍎", matchId: 7 }, { word: "BANANA", icon: "🍌", matchId: 8 }, { word: "RED", icon: "🔴", matchId: 9 },
                 { word: "BLUE", icon: "🔵", matchId: 10 }, { word: "HOUSE", icon: "🏠", matchId: 11 }, { word: "CLOCK", icon: "⏰", matchId: 12 },
                 { word: "BOOK", icon: "📚", matchId: 13 }, { word: "STAR", icon: "⭐", matchId: 14 }
             ]},
-            // Level 3: 4x4 Grid (8 Pairs, 16 Cards) - Actions/Verbs (Icon Representation)
+            // Level 3: 4x4 Grid (8 Pairs, 16 Cards)
             { level: 3, gridSize: '4x4', words: [
                 { word: "WALK", icon: "🚶", matchId: 15 }, { word: "RUN", icon: "🏃", matchId: 16 }, { word: "SIT", icon: "🪑", matchId: 17 },
                 { word: "SLEEP", icon: "😴", matchId: 18 }, { word: "DRINK", icon: "🥛", matchId: 19 }, { word: "EAT", icon: "🍽️", matchId: 20 },
                 { word: "GIFT", icon: "🎁", matchId: 21 }, { word: "LOVE", icon: "❤️", matchId: 22 }
             ]},
-            // Level 4: 4x5 Grid (10 Pairs, 20 Cards) - Abstract/Feelings
+            // Level 4: 4x5 Grid (10 Pairs, 20 Cards)
             { level: 4, gridSize: '4x5', words: [
                 { word: "HAPPY", icon: "😊", matchId: 23 }, { word: "SAD", icon: "😔", matchId: 24 }, { word: "SHOCK", icon: "😲", matchId: 25 },
                 { word: "IDEA", icon: "💡", matchId: 26 }, { word: "MONEY", icon: "💰", matchId: 27 }, { word: "TICKET", icon: "🎫", matchId: 28 },
                 { word: "PEN", icon: "🖊️", matchId: 29 }, { word: "KEY", icon: "🔑", matchId: 30 }, { word: "CUP", icon: "☕", matchId: 31 }, { word: "FLAG", icon: "🚩", matchId: 32 }
             ]},
-            // Level 5: 4x5 Grid (10 Pairs, 20 Cards) - Nature/Weather
+            // Level 5: 4x5 Grid (10 Pairs, 20 Cards)
             { level: 5, gridSize: '4x5', words: [
                 { word: "WATER", icon: "💧", matchId: 33 }, { word: "FIRE", icon: "🔥", matchId: 34 }, { word: "CLOUD", icon: "☁️", matchId: 35 },
                 { word: "RAIN", icon: "🌧️", matchId: 36 }, { word: "SNOW", icon: "❄️", matchId: 37 }, { word: "FLOWER", icon: "🌸", matchId: 38 },
                 { word: "MOUNTAIN", icon: "⛰️", matchId: 39 }, { word: "MOON", icon: "🌕", matchId: 40 }, { word: "ROAD", icon: "🛣️", matchId: 41 }, { word: "BOAT", icon: "⛵", matchId: 42 }
             ]},
-            // Level 6: 4x5 Grid (10 Pairs, 20 Cards) - Professions/People
+            // Level 6: 4x5 Grid (10 Pairs, 20 Cards)
             { level: 6, gridSize: '4x5', words: [
                 { word: "DOCTOR", icon: "🧑‍⚕️", matchId: 43 }, { word: "POLICE", icon: "👮", matchId: 44 }, { word: "STUDENT", icon: "🧑‍🎓", matchId: 45 },
                 { word: "CHEF", icon: "🧑‍🍳", matchId: 46 }, { word: "KING", icon: "👑", matchId: 47 }, { word: "FAMILY", icon: "👪", matchId: 48 },
                 { word: "BABY", icon: "👶", matchId: 49 }, { word: "HAND", icon: "✋", matchId: 50 }, { word: "EYE", icon: "👁️", matchId: 51 }, { word: "EAR", icon: "👂", matchId: 52 }
             ]},
-            // Level 7: 5x4 Grid (10 Pairs, 20 Cards) - Mixed & Extended Basic
+            // Level 7: 5x4 Grid (10 Pairs, 20 Cards)
             { level: 7, gridSize: '5x4', words: [
                 { word: "DESK", icon: "🖥️", matchId: 53 }, { word: "MOUSE", icon: "🖱️", matchId: 54 }, { word: "EMAIL", icon: "📧", matchId: 55 },
                 { word: "CALENDAR", icon: "📅", matchId: 56 }, { word: "TRUCK", icon: "🚚", matchId: 57 }, { word: "BUS", icon: "🚌", matchId: 58 },
                 { word: "WINE", icon: "🍷", matchId: 59 }, { word: "BEER", icon: "🍺", matchId: 60 }, { word: "PIZZA", icon: "🍕", matchId: 61 }, { word: "SHIRT", icon: "👕", matchId: 62 }
             ]},
-            // Level 8: 5x4 Grid (10 Pairs, 20 Cards) - Advanced Basic Objects
+            // Level 8: 5x4 Grid (10 Pairs, 20 Cards)
             { level: 8, gridSize: '5x4', words: [
                 { word: "CAMERA", icon: "📷", matchId: 63 }, { word: "VIDEO", icon: "📹", matchId: 64 }, { word: "NOTE", icon: "📝", matchId: 65 },
                 { word: "CALCULATE", icon: "🧮", matchId: 66 }, { word: "GLOBE", icon: "🌍", matchId: 67 }, { word: "BAG", icon: "👜", matchId: 68 },
                 { word: "BIKE", icon: "🚲", matchId: 69 }, { word: "TRAIN", icon: "🚂", matchId: 70 }, { word: "TENT", icon: "⛺", matchId: 71 }, { word: "WIFI", icon: "📶", matchId: 72 }
             ]},
-            // Level 9: 5x5 Grid (12 Pairs, 24 Cards) - Increased Difficulty
+            // Level 9: 5x5 Grid (12 Pairs, 24 Cards)
             { level: 9, gridSize: '5x5', words: [
                 { word: "LOCK", icon: "🔒", matchId: 73 }, { word: "UNLOCK", icon: "🔓", matchId: 74 }, { word: "ARROW", icon: "⬆️", matchId: 75 },
                 { word: "DOWN", icon: "⬇️", matchId: 76 }, { word: "PLUS", icon: "➕", matchId: 77 }, { word: "MINUS", icon: "➖", matchId: 78 },
                 { word: "WAVE", icon: "🌊", matchId: 79 }, { word: "HELICOPTER", icon: "🚁", matchId: 80 }, { word: "FIREWORKS", icon: "🎆", matchId: 81 },
                 { word: "DIAMOND", icon: "💎", matchId: 82 }, { word: "TROPHY", icon: "🏆", matchId: 83 }, { word: "GRADUATION", icon: "🎓", matchId: 84 }
             ]},
-            // Level 10: 6x4 Grid (12 Pairs, 24 Cards) - Max Size
+            // Level 10: 6x4 Grid (12 Pairs, 24 Cards)
             { level: 10, gridSize: '6x4', words: [
                 { word: "SMILE", icon: "😀", matchId: 85 }, { word: "CRY", icon: "😭", matchId: 86 }, { word: "ANGRY", icon: "😡", matchId: 87 },
                 { word: "KISS", icon: "💋", matchId: 88 }, { word: "SPEECH", icon: "💬", matchId: 89 }, { word: "CAMERA", icon: "📸", matchId: 90 },
@@ -343,7 +343,7 @@
             ]}
         ];
 
-        // --- GAME STATE & ELEMENTS (Unchanged) ---
+        // --- GAME STATE & ELEMENTS ---
         let currentLevel = null;
         let cards = [];
         let flippedCards = [];
@@ -375,34 +375,24 @@
             if ('speechSynthesis' in window) {
                 utterance = new SpeechSynthesisUtterance();
                 utterance.volume = 1; 
-                utterance.rate = 0.8; // Slightly slower speed for learning
+                utterance.rate = 0.8; 
                 utterance.pitch = 1;
                 utterance.lang = 'en-US';
-                // Trigger voice loading
                 window.speechSynthesis.getVoices(); 
             }
         }
 
-        /**
-         * @description อ่านออกเสียงคำศัพท์ภาษาอังกฤษ
-         * @param {string} text คำศัพท์ที่ต้องการอ่าน
-         * @param {function} callback ฟังก์ชันที่เรียกเมื่อการอ่านจบ
-         */
         function speakWord(text, callback = null) {
             if (utterance) {
                 window.speechSynthesis.cancel();
                 utterance.text = text;
-                
                 const voices = window.speechSynthesis.getVoices();
-                // พยายามเลือกเสียงภาษาอังกฤษ
                 utterance.voice = voices.find(v => v.lang.startsWith('en-US') || v.lang.startsWith('en-GB') || v.lang.startsWith('en-')); 
-
                 isSpeaking = true;
                 utterance.onend = () => {
                     isSpeaking = false;
                     if (callback) callback();
                 };
-                
                 try {
                     window.speechSynthesis.speak(utterance); 
                 } catch(e) {
@@ -415,10 +405,6 @@
             }
         }
 
-        /**
-         * @description สร้างและเล่นเสียงสั้นๆ (Pling/Buzz)
-         * @param {string} type 'success' (ปิ๊ง) หรือ 'error' (อ๊อด/สั่น)
-         */
         function playSound(type) {
             if (typeof AudioContext === 'undefined') return;
 
@@ -445,11 +431,7 @@
             oscillator.stop(context.currentTime + 0.4);
         }
 
-        // --- HELPER FUNCTIONS (แก้ไขปัญหาปุ่มไม่แสดง) ---
-
-        /**
-         * @description สลับตำแหน่งสมาชิกในอาร์เรย์ (Fisher-Yates Shuffle)
-         */
+        // --- HELPER FUNCTIONS ---
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -458,9 +440,6 @@
             return array;
         }
 
-        /**
-         * @description แสดงหน้าจอตาม ID ที่กำหนด
-         */
         function showScreen(id) {
             window.speechSynthesis.cancel();
             document.querySelectorAll('.screen').forEach(screen => {
@@ -469,17 +448,11 @@
             document.getElementById(id).classList.add('active');
         }
 
-        /**
-         * @description อัพเดทสถิติบนหน้าจอ
-         */
         function updateStats() {
             flipsEl.textContent = `การเปิดไพ่: ${totalFlips} ครั้ง`;
             timerEl.textContent = `เวลา: ${timeElapsed.toFixed(2)} วินาที`;
         }
         
-        /**
-         * @description เริ่มจับเวลา
-         */
         function startTimer() {
              startTime = performance.now();
              clearInterval(timerInterval);
@@ -489,16 +462,11 @@
              }, 100);
         }
 
-        /**
-         * @description หยุดจับเวลา
-         */
         function stopTimer() {
              clearInterval(timerInterval);
         }
 
-        /**
-         * @description สร้างปุ่ม Level Selection
-         */
+        /* *************** แก้ไขตามคำขอที่ 3: สีปุ่ม Level *************** */
         function createLevelButtons() {
             levelGridSelectEl.innerHTML = '';
             allWords.forEach(data => {
@@ -507,14 +475,22 @@
                 btn.textContent = `Level ${data.level} (${data.gridSize})`;
                 btn.setAttribute('data-level', data.level);
                 
-                // Set theme for buttons
-                if (data.level >= 4 && data.level <= 6) {
-                    btn.style.backgroundColor = 'var(--color-primary, #8E24AA)'; 
+                let btnBgColor;
+                let btnShadowColor;
+                
+                if (data.level >= 1 && data.level <= 3) {
+                    btnBgColor = '#1976D2'; // Dark Blue (สีฟ้าเข้มสำหรับปุ่ม)
+                    btnShadowColor = '#1565C0'; 
+                } else if (data.level >= 4 && data.level <= 6) {
+                    btnBgColor = '#8E24AA'; // Dark Violet (สีม่วงเข้ม)
+                    btnShadowColor = '#6A1B9A';
                 } else if (data.level >= 7 && data.level <= 10) {
-                    btn.style.backgroundColor = 'var(--color-primary, #FF9800)'; 
-                } else {
-                    btn.style.backgroundColor = 'var(--color-primary, #1976D2)'; 
+                    btnBgColor = '#FF9800'; // Orange (สีส้ม/เหลืองทอง)
+                    btnShadowColor = '#F57C00';
                 }
+
+                btn.style.backgroundColor = btnBgColor;
+                btn.style.boxShadow = `0 4px 0 ${btnShadowColor}`;
 
                 btn.addEventListener('click', () => {
                     startGame(data.level);
@@ -523,27 +499,20 @@
             });
         }
         
-        /**
-         * @description เตรียมการ์ดสำหรับ Level ที่กำหนด
-         */
         function setupCards(levelData) {
             const wordPairs = levelData.words;
             cards = [];
 
-            // 1. สร้างการ์ด Word และ Icon
             wordPairs.forEach(pair => {
                 cards.push({ content: pair.word, type: 'word', matchId: pair.matchId });
                 cards.push({ content: pair.icon, type: 'icon', matchId: pair.matchId });
             });
 
-            // 2. สลับตำแหน่งการ์ด
             cards = shuffleArray(cards);
 
-            // 3. กำหนด Grid และสร้าง UI
             gameGridEl.innerHTML = '';
             const [cols, rows] = levelData.gridSize.split('x').map(Number);
             
-            // Adjust CSS grid layout
             gameGridEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
             gameGridEl.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
             
@@ -560,7 +529,6 @@
                 const cardFront = document.createElement('div');
                 cardFront.className = 'card-front';
                 
-                // Display content appropriately
                 if (cardData.type === 'word') {
                      cardFront.textContent = cardData.content;
                 } else {
@@ -581,15 +549,12 @@
             });
         }
         
-        /**
-         * @description กลับไปหน้าเลือก Level
-         */
         function goToLevelSelect() {
             showScreen('level-select-screen');
         }
 
 
-        // --- GAME FLOW (Adjusted for effects/TTS) ---
+        // --- GAME FLOW ---
         
         function applyLevelTheme(level) {
             mainContainerEl.classList.remove('level-4-6-theme', 'level-7-10-theme');
@@ -598,7 +563,6 @@
             } else if (level >= 7 && level <= 10) {
                 mainContainerEl.classList.add('level-7-10-theme');
             } else {
-                 // Ensures default theme is applied for 1-3
                  mainContainerEl.classList.remove('level-4-6-theme', 'level-7-10-theme');
             }
         }
@@ -629,7 +593,6 @@
         }
 
         function handleCardClick(event) {
-            // Check if game is locked or if speech is active 
             if (gameLocked || isSpeaking) return; 
             
             const cardEl = event.currentTarget;
@@ -656,28 +619,26 @@
             const card2El = flippedCards[1].cardEl;
             
             const isMatch = (card1.matchId === card2.matchId) && (card1.type !== card2.type);
-            // หาคำศัพท์ภาษาอังกฤษสำหรับอ่านออกเสียง
             const wordToSpeak = card1.type === 'word' ? card1.content : card2.content;
 
             if (isMatch) {
-                // --- 1. SUCCESS EFFECT & TTS ---
+                // SUCCESS
                 score += 1; 
                 matchedPairs++;
                 
-                playSound('success'); // เล่นเสียง "ปิ๊ง"
+                playSound('success');
                 
-                // เพิ่มเอฟเฟกต์ "ซูม/กระโดด"
                 card1El.classList.add('matched-correct');
                 card2El.classList.add('matched-correct');
                 
                 messageAreaEl.textContent = `🎉 MATCH! (${wordToSpeak}) คู่ที่ ${matchedPairs}/${allWords.find(d => d.level === currentLevel).words.length}`;
                 messageAreaEl.style.color = 'var(--color-correct)';
                 
-                // 2. อ่านออกเสียงคำศัพท์
+                // 1. Speak the word
                 speakWord(wordToSpeak, () => {
-                    // 3. หน่วงเวลา 1 วินาที (รวมกับเวลาพูด) เพื่อให้ผู้เล่นเล่นต่อได้
+                    // 2. Wait 1 second after speaking ends
                     setTimeout(() => {
-                        // 4. Mark as matched and unlock
+                        // 3. Mark as matched and unlock
                         card1El.classList.add('matched');
                         card2El.classList.add('matched');
                         
@@ -687,13 +648,19 @@
                         gameLocked = false;
                         flippedCards = [];
                         checkWinCondition();
-                    }, 1000); // ค้างคู่ไพ่คำนั้นไว้ 1 วินาที
+                    }, 1000); 
                 });
                 
             } else {
-                // --- 5. ERROR EFFECT ---
-                playSound('error'); // เล่นเสียง "อ๊อด"
-                mainContainerEl.classList.add('shake'); // เพิ่มเอฟเฟกต์ "สั่น"
+                /* *************** แก้ไขตามคำขอที่ 2: การสั่นคู่ไพ่ที่จับคู่ผิด *************** */
+                playSound('error'); 
+                
+                const inner1 = card1El.querySelector('.card-inner');
+                const inner2 = card2El.querySelector('.card-inner');
+                
+                // Apply shake effect to the card-inner elements
+                inner1.classList.add('shake-error');
+                inner2.classList.add('shake-error');
                 
                 messageAreaEl.textContent = `❌ ผิดพลาด! ลองใหม่อีกครั้ง`;
                 messageAreaEl.style.color = 'var(--color-wrong)';
@@ -702,7 +669,11 @@
                 setTimeout(() => {
                     card1El.classList.remove('flipped');
                     card2El.classList.remove('flipped');
-                    mainContainerEl.classList.remove('shake'); // ลบเอฟเฟกต์สั่น
+                    
+                    // Remove shake effect
+                    inner1.classList.remove('shake-error');
+                    inner2.classList.remove('shake-error');
+                    
                     gameLocked = false;
                     flippedCards = [];
                 }, 1200);
@@ -731,10 +702,10 @@
             }
         }
 
-        // --- INITIAL SETUP (แก้ไขปัญหาปุ่มไม่แสดง) ---
+        // --- INITIAL SETUP ---
         document.addEventListener('DOMContentLoaded', () => {
             setupSpeech();
-            createLevelButtons(); // **แก้ไข: ฟังก์ชันนี้ถูกเรียกใช้งานเพื่อสร้างปุ่ม**
+            createLevelButtons(); 
 
             // Bind Control Buttons
             document.getElementById('main-menu-btn-play').addEventListener('click', goToLevelSelect);
@@ -749,9 +720,8 @@
                 }
             });
 
-            // Bind level selection buttons (re-using createLevelButtons logic)
+            // Bind level selection click handler
             levelGridSelectEl.addEventListener('click', (e) => {
-                // **แก้ไข: ตรวจสอบ class/tag name ของปุ่มที่สร้างขึ้น**
                 if (e.target.tagName === 'BUTTON' && e.target.closest('#level-grid-select')) {
                     const levelId = parseInt(e.target.getAttribute('data-level'));
                     if (!isNaN(levelId)) {
