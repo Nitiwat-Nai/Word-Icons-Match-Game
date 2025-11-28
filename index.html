@@ -2,168 +2,136 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Icons Match 🧠</title> 
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Word Icons Match ✨</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        /* --- GLOBAL THEME SETUP --- */
+        /* --- MODERN THEME VARIABLES --- */
         :root {
-            /* Fallback Colors (L1-L4: Blue Theme) */
-            --color-primary: #1976D2; /* Dark Blue */
-            --color-secondary: #00BCD4; /* Cyan/Accent */
-            --color-card-front: #BBDEFB; /* Light Blue */
-            --color-card-back: #1976D2; 
-            --color-text-light: #FFFFFF;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Deep Purple/Blue */
+            --secondary-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); /* Soft Pink */
+            --accent-gradient: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%); /* Mint/Blue */
             
-            --color-correct: #8BC34A; /* Lime Green */
-            --color-wrong: #F44336; /* Red */
-            --color-bg: #E3F2FD; /* Lighter Blue Background */
-            --color-text-dark: #263238;
-        }
-        
-        /* Level 5-8 Theme: Pink/Violet */
-        .level-5-8-theme {
-            --color-primary: #8E24AA; /* Dark Violet */
-            --color-secondary: #FF4081; /* Pink/Accent */
-            --color-card-front: #F8BBD0; /* Light Pink */
-            --color-card-back: #8E24AA; 
-            --color-bg: #FCE4EC; /* Lighter Pink Background */
-        }
-        
-        /* Level 9-10 Theme: Yellow/Orange */
-        .level-9-10-theme {
-            --color-primary: #FF9800; /* Orange */
-            --color-secondary: #FFEB3B; /* Yellow/Accent */
-            --color-card-front: #FFE0B2; /* Light Orange */
-            --color-card-back: #FF9800; 
-            --color-bg: #FFF3E0; /* Lighter Orange Background */
-        }
-        
-        /* Level 11-12 Theme: Green/Teal (New Theme) */
-        .level-11-12-theme {
-            --color-primary: #00796B; /* Dark Teal */
-            --color-secondary: #4DB6AC; /* Light Teal/Accent */
-            --color-card-front: #B2DFDB; /* Light Green-Blue */
-            --color-card-back: #00796B; 
-            --color-bg: #E0F2F1; /* Lighter Teal Background */
+            --bg-color: #f0f4f8;
+            --surface-color: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            
+            --radius-card: 12px;
+            --radius-btn: 50px;
         }
 
-        /* --- CONTAINER & BASE STYLES --- */
+        /* Level Specific Gradients */
+        .theme-blue { --card-back-bg: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .theme-violet { --card-back-bg: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+        .theme-orange { --card-back-bg: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
+        .theme-teal { --card-back-bg: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+
+        /* --- BASE STYLES --- */
         body {
             font-family: 'Sarabun', sans-serif;
-            background-color: var(--color-bg);
-            color: var(--color-text-dark);
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            text-align: center;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
-            box-sizing: border-box;
-            background-color: #FFFFFF;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 480px; /* Mobile optimal width */
+            background-color: var(--surface-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            padding: 0;
-            transition: background-color 0.5s;
+            box-shadow: var(--shadow-lg);
+            position: relative;
         }
 
+        /* --- HEADER --- */
         header {
-            background-color: var(--color-primary);
-            color: var(--color-text-light);
-            padding: 1rem 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.5s;
-        }
-        header h1 { font-size: 1.8rem; margin: 0; } 
-        
-        .screen {
+            background: var(--primary-gradient);
+            color: white;
             padding: 1rem;
-            display: none; 
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+        }
+        header h1 { 
+            font-size: 1.5rem; 
+            margin: 0; 
+            font-weight: 800; 
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* --- SCREENS --- */
+        .screen {
             flex-grow: 1;
+            display: none;
             flex-direction: column;
-            justify-content: flex-start; 
-            gap: 15px;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease-in-out;
         }
         .screen.active { display: flex; }
 
-        .status-bar {
-             display: flex;
-             justify-content: space-around;
-             padding: 10px 0;
-             font-weight: bold;
-             font-size: 1rem;
-             color: var(--color-primary);
-             transition: color 0.5s;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
+
+        h2 { text-align: center; color: var(--text-main); font-weight: 800; margin-bottom: 0.5rem; }
+        p { text-align: center; color: var(--text-muted); margin-top: 0; font-size: 0.9rem; }
+
+        /* --- LEVEL GRID --- */
         #level-grid-select {
-             /* ปรับเป็น 3 คอลัมน์สำหรับ 12 เลเวลเพื่อให้ดูดีขึ้น */
-             display: grid;
-             grid-template-columns: repeat(3, 1fr); 
-             gap: 15px;
-             padding: 0.5rem 0;
-        }
-
-        /* --- Card Grid and Card Styles --- */
-        #game-grid {
-            width: 95%;
-            margin: 1rem auto;
             display: grid;
-            gap: 10px;
-        }
-        
-        .card {
-            height: 85px; 
-            perspective: 1000px; 
-            cursor: pointer;
-            transition: transform 0.6s, box-shadow 0.3s;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 10px 0;
         }
 
-        /* Card Flip Animation */
-        .card.flipped .card-inner { transform: rotateY(180deg); }
+        /* --- GAME GRID (The Gameplay) --- */
+        #game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 Columns Fixed */
+            gap: 8px;
+            width: 100%;
+            margin: 0 auto;
+            flex-grow: 1; /* Push controls down */
+            align-content: start;
+        }
+
+        /* --- CARDS (Modernized) --- */
+        .card {
+            aspect-ratio: 1 / 1.1; /* Maintain ratio, prevent squishing */
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+            touch-action: manipulation;
+        }
 
         .card-inner {
             width: 100%;
             height: 100%;
-            transition: transform 0.6s;
+            transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
             transform-style: preserve-3d;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            position: relative; 
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-sm);
+            position: relative;
         }
 
-        /* Shake Effect for Error */
-        @keyframes card-shake {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            10% { transform: translate(-2px, 0) rotate(-1deg); }
-            30% { transform: translate(2px, 0) rotate(0deg); }
-            50% { transform: translate(-2px, 0) rotate(1deg); }
-            70% { transform: translate(2px, 0) rotate(-1deg); }
-            90% { transform: translate(-2px, 0) rotate(0deg); }
-        }
-        .card-inner.shake-error {
-            animation: card-shake 0.5s ease-in-out;
-        }
-        
-        /* Jump Effect for Match */
-        .card.matched-correct {
-            animation: jump 0.8s ease-out;
-        }
-        @keyframes jump {
-            0% { transform: scale(1); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
-            50% { transform: scale(1.08) translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); }
-            100% { transform: scale(1); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
-        }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
 
         .card-front, .card-back {
             position: absolute;
@@ -173,118 +141,178 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 8px;
-            font-weight: 700;
-            padding: 5px;
+            border-radius: var(--radius-card);
+            font-weight: 800;
+            padding: 4px;
             box-sizing: border-box;
             text-align: center;
+            overflow: hidden;
         }
 
+        /* Back of Card (Pattern) */
         .card-back {
-            background-color: var(--color-card-back);
-            color: var(--color-text-light);
-            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.2) 0px, rgba(255,255,255,.2) 1px, transparent 1px, transparent 10px);
-            border: 3px solid var(--color-primary);
+            background: var(--card-back-bg, #cbd5e0);
+            color: white;
             font-size: 1.5rem;
+            border: 2px solid white;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        .card-back::after {
+            content: "?";
+            opacity: 0.8;
         }
 
+        /* Front of Card (Content) */
         .card-front {
-            background-color: var(--color-card-front);
-            color: var(--color-text-dark);
+            background-color: white;
+            color: var(--text-main);
             transform: rotateY(180deg);
-            border: 3px solid var(--color-secondary);
-            font-size: 1.1rem; 
+            border: 2px solid #e2e8f0;
+            font-size: 0.9rem; /* Smaller text for words */
+            word-break: break-word;
+            line-height: 1.1;
         }
         
-        .card-content-icon {
-            font-size: 2.5rem; 
-        }
-        
-        .card.matched .card-inner {
-            box-shadow: 0 0 15px var(--color-correct);
-            opacity: 0.5;
-            cursor: default;
-        }
-        .card.matched .card-front {
-             border-color: var(--color-correct);
+        .card-content-icon { font-size: 2rem; }
+
+        /* Correct Match */
+        .card.matched .card-inner { 
+            box-shadow: 0 0 0 3px #48bb78; /* Green ring */
+            opacity: 0.6;
+            transform: rotateY(180deg) scale(0.95);
         }
 
-        /* --- Control Button Styles --- */
-        .control-btn {
-            color: var(--color-text-light);
-            border: none;
-            padding: 1rem;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.1s, background-color 0.5s, box-shadow 0.5s;
-            width: 100%; 
+        /* Animations */
+        @keyframes jump {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
         }
+        .card.matched-correct { animation: jump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px) rotate(-5deg); }
+            75% { transform: translateX(5px) rotate(5deg); }
+        }
+        .card-inner.shake-error { animation: shake 0.4s ease-in-out; border: 2px solid #fc8181; }
+
+        /* --- STATUS BAR --- */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .status-item span {
+            display: block;
+            font-weight: 800;
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+
+        /* --- BUTTONS (Modern UI) --- */
+        .control-btn {
+            border: none;
+            padding: 12px 10px;
+            border-radius: var(--radius-btn);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
         .control-btn:active {
             transform: translateY(2px);
-            box-shadow: 0 2px 0 var(--color-primary) !important; 
-        }
-        #game-controls { margin-top: 1rem; width: 100%; }
-        
-        /* **แก้ไขที่ 1: ปุ่มกลับหน้าหลักเดี่ยว (ขณะเล่น)** */
-        #play-controls { 
-            display: flex; 
-            gap: 10px; 
-            width: 100%; 
-        }
-        /* กำหนดให้ปุ่ม "กลับหน้าหลัก" มีขนาดเต็ม (100%) เมื่ออยู่ปุ่มเดียว */
-        #play-controls .control-btn { 
-            width: 100%; 
-        }
-        
-        #end-game-controls { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
-            width: 100%; 
-        }
-        /* ปุ่มทั้งหมดเมื่อจบเกมมีขนาด 100% */
-        #end-game-controls .control-btn { 
-            width: 100%; 
+            box-shadow: 0 2px 3px rgba(50, 50, 93, 0.1);
         }
 
-        .success-btn {
-            background-color: var(--color-correct);
-            box-shadow: 0 4px 0 #558B2F;
+        /* Button Variants */
+        .btn-level {
+            font-size: 0.9rem;
+            padding: 15px 5px;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
         }
-        .secondary-btn {
-            background-color: #607D8B; 
-            box-shadow: 0 4px 0 #455A64;
+        
+        /* Level Colors */
+        .btn-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .btn-violet { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+        .btn-orange { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
+        .btn-teal { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+
+        .btn-back { 
+            background: white; 
+            color: var(--text-main); 
+            border: 2px solid #e2e8f0; 
+            box-shadow: none;
+        }
+        .btn-back:hover { background: #f7fafc; }
+
+        .btn-primary { background: var(--primary-gradient); }
+        .btn-success { background: var(--accent-gradient); color: #0f5132; }
+
+        /* Controls Layout */
+        #game-controls {
+            margin-top: auto; /* Push to bottom */
+            padding-top: 10px;
+            width: 100%;
         }
 
+        #play-controls, #end-game-controls {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Message Area */
         #message-area {
-            min-height: 2rem;
-            font-weight: bold;
-            margin-top: 1rem;
-            color: var(--color-secondary);
-            transition: color 0.5s;
+            text-align: center;
+            min-height: 24px;
+            margin: 10px 0;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
         }
+        .text-success { color: #38a169 !important; }
+        .text-error { color: #e53e3e !important; }
+
     </style>
 </head>
 <body>
     <div class="container" id="main-container">
-        <header id="game-header">
-            <h1>Word Icons Match 🧠</h1>
+        <header>
+            <h1>Word Icons Match ✨</h1>
         </header>
 
         <div id="level-select-screen" class="screen active">
-            <h2>เลือกชุดคำศัพท์ (12 Levels)</h2>
-            <p>จับคู่คำศัพท์กับไอคอนที่เข้ากันให้ถูกต้องและเร็วที่สุด</p>
+            <h2>เลือกระดับความยาก</h2>
+            <p>12 Levels • 4 Columns Mode</p>
             <div id="level-grid-select">
                 </div>
         </div>
         
         <div id="game-screen" class="screen">
             <div class="status-bar">
-                <span id="level-info">Level 1: 4x3</span>
-                <span id="flips">การเปิดไพ่: 0 ครั้ง</span>
-                <span id="timer">เวลา: 0.00 วินาที</span>
+                <div class="status-item">Level <span id="level-disp">1</span></div>
+                <div class="status-item">Moves <span id="flips-disp">0</span></div>
+                <div class="status-item">Time <span id="time-disp">00:00</span></div>
             </div>
             
             <div id="game-grid">
@@ -293,512 +321,388 @@
             <div id="message-area"></div>
             
             <div id="game-controls">
-                <div id="play-controls" style="display: flex;">
-                    <button id="main-menu-btn-play" class="control-btn secondary-btn">กลับหน้าหลัก 🏠</button>
+                <div id="play-controls">
+                    <button id="main-menu-btn-play" class="control-btn btn-back">
+                        <span>🏠 กลับหน้าหลัก</span>
+                    </button>
                 </div>
 
-                <div id="end-game-controls" style="display: none; margin-top: 10px;">
-                    <button id="play-again-btn" class="control-btn success-btn">เล่นใหม่ (ชุดนี้) 🔄</button>
-                    <button id="next-level-btn" class="control-btn">Level ถัดไป ▶️</button>
-                    <button id="main-menu-btn-end" class="control-btn secondary-btn">กลับหน้าหลัก 🏠</button> 
+                <div id="end-game-controls" style="display: none;">
+                    <button id="play-again-btn" class="control-btn btn-success">
+                        <span>🔄 เล่นใหม่ (ชุดนี้)</span>
+                    </button>
+                    <button id="next-level-btn" class="control-btn btn-primary">
+                        <span>▶️ Level ถัดไป</span>
+                    </button>
+                    <button id="main-menu-btn-end" class="control-btn btn-back">
+                        <span>🏠 กลับหน้าหลัก</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- DATA: 84 Pairs for 12 Levels (4 คอลัมน์คงที่) ---
-        const ALL_WORDS_DATA = [
-            // L1-L4: 4x3 (6 Pairs x 4 Levels = 24 Pairs)
-            // L1
-            { word: "CAT", icon: "🐱", matchId: 1 }, { word: "DOG", icon: "🐶", matchId: 2 }, { word: "CAR", icon: "🚗", matchId: 3 },
-            { word: "SUN", icon: "☀️", matchId: 4 }, { word: "TREE", icon: "🌳", matchId: 5 }, { word: "BALL", icon: "⚽", matchId: 6 },
-            // L2
-            { word: "APPLE", icon: "🍎", matchId: 7 }, { word: "BANANA", icon: "🍌", matchId: 8 }, { word: "RED", icon: "🔴", matchId: 9 },
-            { word: "BLUE", icon: "🔵", matchId: 10 }, { word: "HOUSE", icon: "🏠", matchId: 11 }, { word: "CLOCK", icon: "⏰", matchId: 12 },
-            // L3
-            { word: "WALK", icon: "🚶", matchId: 13 }, { word: "RUN", icon: "🏃", matchId: 14 }, { word: "SIT", icon: "🪑", matchId: 15 },
-            { word: "SLEEP", icon: "😴", matchId: 16 }, { word: "DRINK", icon: "🥛", matchId: 17 }, { word: "EAT", icon: "🍽️", matchId: 18 },
-            // L4
-            { word: "GIFT", icon: "🎁", matchId: 19 }, { word: "LOVE", icon: "❤️", matchId: 20 }, { word: "HAPPY", icon: "😊", matchId: 21 }, 
-            { word: "SAD", icon: "😔", matchId: 22 }, { word: "SHOCK", icon: "😲", matchId: 23 }, { word: "IDEA", icon: "💡", matchId: 24 },
-            
-            // L5-L8: 4x4 (8 Pairs x 4 Levels = 32 Pairs)
-            // L5
-            { word: "MONEY", icon: "💰", matchId: 25 }, { word: "TICKET", icon: "🎫", matchId: 26 }, { word: "PEN", icon: "🖊️", matchId: 27 }, 
-            { word: "KEY", icon: "🔑", matchId: 28 }, { word: "CUP", icon: "☕", matchId: 29 }, { word: "FLAG", icon: "🚩", matchId: 30 },
-            { word: "WATER", icon: "💧", matchId: 31 }, { word: "FIRE", icon: "🔥", matchId: 32 },
-            // L6
-            { word: "CLOUD", icon: "☁️", matchId: 33 }, { word: "RAIN", icon: "🌧️", matchId: 34 }, { word: "SNOW", icon: "❄️", matchId: 35 }, 
-            { word: "FLOWER", icon: "🌸", matchId: 36 }, { word: "MOUNTAIN", icon: "⛰️", matchId: 37 }, { word: "MOON", icon: "🌕", matchId: 38 },
-            { word: "ROAD", icon: "🛣️", matchId: 39 }, { word: "BOAT", icon: "⛵", matchId: 40 },
-            // L7
-            { word: "DOCTOR", icon: "🧑‍⚕️", matchId: 41 }, { word: "POLICE", icon: "👮", matchId: 42 }, { word: "STUDENT", icon: "🧑‍🎓", matchId: 43 }, 
-            { word: "CHEF", icon: "🧑‍🍳", matchId: 44 }, { word: "KING", icon: "👑", matchId: 45 }, { word: "FAMILY", icon: "👪", matchId: 46 },
-            { word: "BABY", icon: "👶", matchId: 47 }, { word: "HAND", icon: "✋", matchId: 48 },
-            // L8
-            { word: "EYE", icon: "👁️", matchId: 49 }, { word: "EAR", icon: "👂", matchId: 50 }, { word: "DESK", icon: "🖥️", matchId: 51 }, 
-            { word: "MOUSE", icon: "🖱️", matchId: 52 }, { word: "EMAIL", icon: "📧", matchId: 53 }, { word: "CALENDAR", icon: "📅", matchId: 54 },
-            { word: "TRUCK", icon: "🚚", matchId: 55 }, { word: "BUS", icon: "🚌", matchId: 56 },
-            
-            // L9-L10: 4x5 (10 Pairs x 2 Levels = 20 Pairs)
-            // L9
-            { word: "WINE", icon: "🍷", matchId: 57 }, { word: "BEER", icon: "🍺", matchId: 58 }, { word: "PIZZA", icon: "🍕", matchId: 59 }, 
-            { word: "SHIRT", icon: "👕", matchId: 60 }, { word: "CAMERA", icon: "📷", matchId: 61 }, { word: "VIDEO", icon: "📹", matchId: 62 }, 
-            { word: "NOTE", icon: "📝", matchId: 63 }, { word: "CALCULATE", icon: "🧮", matchId: 64 }, { word: "GLOBE", icon: "🌍", matchId: 65 }, 
-            { word: "BAG", icon: "👜", matchId: 66 },
-            // L10 
-            { word: "BIKE", icon: "🚲", matchId: 67 }, { word: "TRAIN", icon: "🚂", matchId: 68 }, { word: "TENT", icon: "⛺", matchId: 69 }, 
-            { word: "WIFI", icon: "📶", matchId: 70 }, { word: "LOCK", icon: "🔒", matchId: 71 }, { word: "UNLOCK", icon: "🔓", matchId: 72 },
-            { word: "ARROW", icon: "⬆️", matchId: 73 }, { word: "DOWN", icon: "⬇️", matchId: 74 }, { word: "PLUS", icon: "➕", matchId: 75 }, 
-            { word: "MINUS", icon: "➖", matchId: 76 },
-            
-            // L11-L12: 4x6 (12 Pairs x 2 Levels = 24 Pairs) - NEW WORDS ADDED
-            // L11
-            { word: "KEYBOARD", icon: "⌨️", matchId: 77 }, { word: "PRINTER", icon: "🖨️", matchId: 78 }, { word: "MUTE", icon: "🔇", matchId: 79 }, 
-            { word: "VOLUME", icon: "🔊", matchId: 80 }, { word: "LIGHT", icon: "💡", matchId: 81 }, { word: "DARK", icon: "🌑", matchId: 82 }, 
-            { word: "CHAIR", icon: "🪑", matchId: 83 }, { word: "TABLE", icon: "🪚", matchId: 84 }, { word: "EARTH", icon: "🌎", matchId: 85 }, 
-            { word: "MARS", icon: "🔴", matchId: 86 }, { word: "RING", icon: "💍", matchId: 87 }, { word: "DIAMOND", icon: "💎", matchId: 88 },
-            // L12
-            { word: "SHIELD", icon: "🛡️", matchId: 89 }, { word: "SWORD", icon: "⚔️", matchId: 90 }, { word: "CROWN", icon: "👑", matchId: 91 }, 
-            { word: "CASTLE", icon: "🏰", matchId: 92 }, { word: "GHOST", icon: "👻", matchId: 93 }, { word: "WITCH", icon: "🧙", matchId: 94 },
-            { word: "ZOMBIE", icon: "🧟", matchId: 95 }, { word: "VAMPIRE", icon: "🧛", matchId: 96 }, { word: "ROBOT", icon: "🤖", matchId: 97 }, 
-            { word: "ALIEN", icon: "👽", matchId: 98 }, { word: "FIREMAN", icon: "👨‍🚒", matchId: 99 }, { word: "PILOT", icon: "🧑‍✈️", matchId: 100 } 
-        ];
+        // --- DATA: 12 LEVELS (60 Pairs + 12 New Pairs = 72 Pairs Total) ---
+        // Updated to ensure distinct words for all 12 levels
         
-        // จัดกลุ่มคำศัพท์ 84 คู่ (168 การ์ด) ใหม่เป็น 12 Levels
-        const newLevels = [
-            { level: 1, gridSize: '4x3', words: ALL_WORDS_DATA.slice(0, 6) },
-            { level: 2, gridSize: '4x3', words: ALL_WORDS_DATA.slice(6, 12) },
-            { level: 3, gridSize: '4x3', words: ALL_WORDS_DATA.slice(12, 18) },
-            { level: 4, gridSize: '4x3', words: ALL_WORDS_DATA.slice(18, 24) },
+        // Helper to create card data
+        const createData = (w, i, id) => ({ word: w, icon: i, matchId: id });
+        
+        const RAW_PAIRS = [
+            // Level 1 (6)
+            createData("CAT", "🐱", 1), createData("DOG", "🐶", 2), createData("CAR", "🚗", 3),
+            createData("SUN", "☀️", 4), createData("TREE", "🌳", 5), createData("BALL", "⚽", 6),
+            // Level 2 (6)
+            createData("APPLE", "🍎", 7), createData("BANANA", "🍌", 8), createData("RED", "🔴", 9),
+            createData("BLUE", "🔵", 10), createData("HOUSE", "🏠", 11), createData("CLOCK", "⏰", 12),
+            // Level 3 (6)
+            createData("WALK", "🚶", 13), createData("RUN", "🏃", 14), createData("SIT", "🪑", 15),
+            createData("SLEEP", "😴", 16), createData("DRINK", "🥛", 17), createData("EAT", "🍽️", 18),
+            // Level 4 (6)
+            createData("GIFT", "🎁", 19), createData("LOVE", "❤️", 20), createData("HAPPY", "😊", 21),
+            createData("SAD", "😔", 22), createData("IDEA", "💡", 23), createData("KEY", "🔑", 24),
             
-            { level: 5, gridSize: '4x4', words: ALL_WORDS_DATA.slice(24, 32) },
-            { level: 6, gridSize: '4x4', words: ALL_WORDS_DATA.slice(32, 40) },
-            { level: 7, gridSize: '4x4', words: ALL_WORDS_DATA.slice(40, 48) },
-            { level: 8, gridSize: '4x4', words: ALL_WORDS_DATA.slice(48, 56) },
+            // Level 5 (8)
+            createData("MONEY", "💰", 25), createData("TICKET", "🎫", 26), createData("PEN", "🖊️", 27),
+            createData("CUP", "☕", 28), createData("FLAG", "🚩", 29), createData("WATER", "💧", 30),
+            createData("FIRE", "🔥", 31), createData("BOOK", "📚", 32),
+            // Level 6 (8)
+            createData("CLOUD", "☁️", 33), createData("RAIN", "🌧️", 34), createData("SNOW", "❄️", 35),
+            createData("FLOWER", "🌸", 36), createData("MTN", "⛰️", 37), createData("MOON", "🌕", 38),
+            createData("ROAD", "🛣️", 39), createData("BOAT", "⛵", 40),
+            // Level 7 (8)
+            createData("DOCTOR", "🧑‍⚕️", 41), createData("POLICE", "👮", 42), createData("CHEF", "🧑‍🍳", 43),
+            createData("KING", "👑", 44), createData("FAMILY", "👪", 45), createData("BABY", "👶", 46),
+            createData("HAND", "✋", 47), createData("EYE", "👁️", 48),
+            // Level 8 (8)
+            createData("EAR", "👂", 49), createData("PC", "🖥️", 50), createData("MOUSE", "🖱️", 51),
+            createData("MAIL", "📧", 52), createData("DATE", "📅", 53), createData("BUS", "🚌", 54),
+            createData("TRUCK", "🚚", 55), createData("PIZZA", "🍕", 56),
+
+            // Level 9 (10)
+            createData("WINE", "🍷", 57), createData("BEER", "🍺", 58), createData("SHIRT", "👕", 59),
+            createData("CAM", "📷", 60), createData("VIDEO", "📹", 61), createData("NOTE", "📝", 62),
+            createData("MATH", "🧮", 63), createData("GLOBE", "🌍", 64), createData("BAG", "👜", 65),
+            createData("BIKE", "🚲", 66),
+            // Level 10 (10)
+            createData("TRAIN", "🚂", 67), createData("TENT", "⛺", 68), createData("WIFI", "📶", 69),
+            createData("LOCK", "🔒", 70), createData("OPEN", "🔓", 71), createData("UP", "⬆️", 72),
+            createData("DOWN", "⬇️", 73), createData("PLUS", "➕", 74), createData("MINUS", "➖", 75),
+            createData("STAR", "⭐", 76),
+
+            // Level 11 (12 Pairs - 4x6)
+            createData("GAME", "🎮", 77), createData("MUSIC", "🎵", 78), createData("MUTE", "🔇", 79),
+            createData("LOUD", "🔊", 80), createData("LAMP", "🛋️", 81), createData("BED", "🛏️", 82),
+            createData("BATH", "🛁", 83), createData("TOILET", "🚽", 84), createData("EARTH", "🌎", 85),
+            createData("MARS", "🔴", 86), createData("RING", "💍", 87), createData("GEM", "💎", 88),
             
-            { level: 9, gridSize: '4x5', words: ALL_WORDS_DATA.slice(56, 66) },
-            { level: 10, gridSize: '4x5', words: ALL_WORDS_DATA.slice(66, 76) },
-            
-            { level: 11, gridSize: '4x6', words: ALL_WORDS_DATA.slice(76, 88) }, /* New Level 11 (12 Pairs) */
-            { level: 12, gridSize: '4x6', words: ALL_WORDS_DATA.slice(88, 100) }  /* New Level 12 (12 Pairs) */
+            // Level 12 (12 Pairs - 4x6)
+            createData("SHIELD", "🛡️", 89), createData("SWORD", "⚔️", 90), createData("CROWN", "👑", 91),
+            createData("CASTLE", "🏰", 92), createData("GHOST", "👻", 93), createData("WITCH", "🧙", 94),
+            createData("ALIEN", "👽", 95), createData("ROBOT", "🤖", 96), createData("SKULL", "💀", 97),
+            createData("BOMB", "💣", 98), createData("ROCKET", "🚀", 99), createData("UFO", "🛸", 100)
         ];
 
-        // --- GAME STATE & ELEMENTS ---
-        let currentLevel = null;
+        // Define Levels configuration
+        const LEVELS_CONFIG = [
+            { id: 1, grid: '4x3', startIdx: 0, count: 6 },
+            { id: 2, grid: '4x3', startIdx: 6, count: 6 },
+            { id: 3, grid: '4x3', startIdx: 12, count: 6 },
+            { id: 4, grid: '4x3', startIdx: 18, count: 6 },
+            { id: 5, grid: '4x4', startIdx: 24, count: 8 },
+            { id: 6, grid: '4x4', startIdx: 32, count: 8 },
+            { id: 7, grid: '4x4', startIdx: 40, count: 8 },
+            { id: 8, grid: '4x4', startIdx: 48, count: 8 },
+            { id: 9, grid: '4x5', startIdx: 56, count: 10 },
+            { id: 10, grid: '4x5', startIdx: 66, count: 10 },
+            { id: 11, grid: '4x6', startIdx: 76, count: 12 },
+            { id: 12, grid: '4x6', startIdx: 88, count: 12 }
+        ];
+
+        // --- GAME VARIABLES ---
+        let currentLevelId = 1;
         let cards = [];
         let flippedCards = [];
         let matchedPairs = 0;
-        let totalFlips = 0;
-        let score = 0;
-        let gameLocked = false; 
+        let moves = 0;
         let timerInterval = null;
-        let timeElapsed = 0;
         let startTime = 0;
-        let isSpeaking = false; 
-
-        const mainContainerEl = document.getElementById('main-container');
-        const levelSelectScreen = document.getElementById('level-select-screen');
-        const gameScreen = document.getElementById('game-screen');
-        const gameGridEl = document.getElementById('game-grid');
-        const levelInfoEl = document.getElementById('level-info');
-        const flipsEl = document.getElementById('flips');
-        const timerEl = document.getElementById('timer');
-        const messageAreaEl = document.getElementById('message-area');
-        const endGameControlsEl = document.getElementById('end-game-controls');
-        const nextLevelBtn = document.getElementById('next-level-btn');
-        const levelGridSelectEl = document.getElementById('level-grid-select');
-        const mainMenuBtnEnd = document.getElementById('main-menu-btn-end');
+        let isLocked = false;
+        let speechSynth = window.speechSynthesis;
         
-        // --- SPEECH & SOUND FUNCTIONS (ไม่เปลี่ยนแปลง) ---
-        let utterance = null;
-        function setupSpeech() {
-            if ('speechSynthesis' in window) {
-                utterance = new SpeechSynthesisUtterance();
-                utterance.volume = 1; 
-                utterance.rate = 0.8; 
-                utterance.pitch = 1;
-                utterance.lang = 'en-US';
-                window.speechSynthesis.getVoices(); 
-            }
-        }
-
-        function speakWord(text, callback = null) {
-            if (utterance) {
-                window.speechSynthesis.cancel();
-                utterance.text = text;
-                const voices = window.speechSynthesis.getVoices();
-                utterance.voice = voices.find(v => v.lang.startsWith('en-US') || v.lang.startsWith('en-GB') || v.lang.startsWith('en-')); 
-                isSpeaking = true;
-                utterance.onend = () => {
-                    isSpeaking = false;
-                    if (callback) callback();
-                };
-                try {
-                    window.speechSynthesis.speak(utterance); 
-                } catch(e) {
-                    isSpeaking = false;
-                    if (callback) callback();
-                }
-            } else {
-                if (callback) callback();
-            }
-        }
-
-        function playSound(type) {
-            if (typeof AudioContext === 'undefined') return;
-
-            const context = new AudioContext();
-            const oscillator = context.createOscillator();
-            const gainNode = context.createGain();
-
-            oscillator.connect(gainNode);
-            gainNode.connect(context.destination);
-
-            if (type === 'success') {
-                oscillator.type = 'square'; 
-                oscillator.frequency.setValueAtTime(880, context.currentTime); 
-                gainNode.gain.setValueAtTime(0.5, context.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.3);
-            } else if (type === 'error') {
-                oscillator.type = 'sawtooth'; 
-                oscillator.frequency.setValueAtTime(150, context.currentTime); 
-                gainNode.gain.setValueAtTime(0.4, context.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.4);
-            }
-
-            oscillator.start();
-            oscillator.stop(context.currentTime + 0.4);
-        }
-
-        // --- HELPER FUNCTIONS ---
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function showScreen(id) {
-            window.speechSynthesis.cancel();
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(id).classList.add('active');
-        }
-
-        function updateStats() {
-            flipsEl.textContent = `การเปิดไพ่: ${totalFlips} ครั้ง`;
-            timerEl.textContent = `เวลา: ${timeElapsed.toFixed(2)} วินาที`;
-        }
+        // --- DOM ELEMENTS ---
+        const screens = {
+            select: document.getElementById('level-select-screen'),
+            game: document.getElementById('game-screen')
+        };
+        const mainContainer = document.getElementById('main-container');
+        const gridEl = document.getElementById('game-grid');
+        const msgEl = document.getElementById('message-area');
         
-        function startTimer() {
-             startTime = performance.now();
-             clearInterval(timerInterval);
-             timerInterval = setInterval(() => {
-                 timeElapsed = (performance.now() - startTime) / 1000;
-                 timerEl.textContent = `เวลา: ${timeElapsed.toFixed(2)} วินาที`;
-             }, 100);
-        }
+        // Displays
+        const dispLevel = document.getElementById('level-disp');
+        const dispMoves = document.getElementById('flips-disp');
+        const dispTime = document.getElementById('time-disp');
+        
+        // Controls
+        const ctrlsPlay = document.getElementById('play-controls');
+        const ctrlsEnd = document.getElementById('end-game-controls');
 
-        function stopTimer() {
-             clearInterval(timerInterval);
-        }
-
-        /* --- Level Button Creation (อัพเดทตาม Level ใหม่) --- */
-        function createLevelButtons() {
-            levelGridSelectEl.innerHTML = '';
+        // --- INITIALIZATION ---
+        function init() {
+            renderLevelButtons();
             
-            newLevels.forEach(data => { 
+            // Event Listeners
+            document.getElementById('main-menu-btn-play').onclick = showMainMenu;
+            document.getElementById('main-menu-btn-end').onclick = showMainMenu;
+            document.getElementById('play-again-btn').onclick = () => startGame(currentLevelId);
+            document.getElementById('next-level-btn').onclick = () => startGame(currentLevelId + 1);
+        }
+
+        function renderLevelButtons() {
+            const grid = document.getElementById('level-grid-select');
+            grid.innerHTML = '';
+            
+            LEVELS_CONFIG.forEach(lvl => {
                 const btn = document.createElement('button');
-                btn.className = 'control-btn';
-                btn.textContent = `Level ${data.level} (${data.words.length} คู่ - ${data.gridSize})`;
-                btn.setAttribute('data-level', data.level);
                 
-                let btnBgColor;
-                let btnShadowColor;
-                
-                // สีปุ่ม Level: L1-L4 (Blue), L5-L8 (Violet), L9-L10 (Orange), L11-L12 (Teal)
-                if (data.level >= 1 && data.level <= 4) {
-                    btnBgColor = '#1976D2'; 
-                    btnShadowColor = '#1565C0'; 
-                } else if (data.level >= 5 && data.level <= 8) {
-                    btnBgColor = '#8E24AA'; 
-                    btnShadowColor = '#6A1B9A';
-                } else if (data.level >= 9 && data.level <= 10) {
-                    btnBgColor = '#FF9800'; 
-                    btnShadowColor = '#F57C00';
-                } else if (data.level >= 11 && data.level <= 12) {
-                    btnBgColor = '#00796B'; 
-                    btnShadowColor = '#004D40'; 
-                }
+                // Determine Theme Class
+                let themeClass = 'btn-blue';
+                if (lvl.id >= 5 && lvl.id <= 8) themeClass = 'btn-violet';
+                if (lvl.id >= 9 && lvl.id <= 10) themeClass = 'btn-orange';
+                if (lvl.id >= 11) themeClass = 'btn-teal';
 
-                btn.style.backgroundColor = btnBgColor;
-                btn.style.boxShadow = `0 4px 0 ${btnShadowColor}`;
-
-                btn.addEventListener('click', () => {
-                    startGame(data.level);
-                });
-                levelGridSelectEl.appendChild(btn);
+                btn.className = `control-btn btn-level ${themeClass}`;
+                btn.innerHTML = `<span>Level ${lvl.id}</span><span style="font-size:0.75rem; opacity:0.8">${lvl.grid}</span>`;
+                btn.onclick = () => startGame(lvl.id);
+                grid.appendChild(btn);
             });
         }
-        
-        function setupCards(levelData) {
-            const wordPairs = levelData.words;
-            cards = [];
 
-            wordPairs.forEach(pair => {
-                cards.push({ content: pair.word, type: 'word', matchId: pair.matchId });
-                cards.push({ content: pair.icon, type: 'icon', matchId: pair.matchId });
+        // --- GAME LOGIC ---
+        function startGame(levelId) {
+            if (levelId > LEVELS_CONFIG.length) return showMainMenu();
+            
+            currentLevelId = levelId;
+            const config = LEVELS_CONFIG.find(l => l.id === levelId);
+            const levelWords = RAW_PAIRS.slice(config.startIdx, config.startIdx + config.count);
+            
+            // Set Theme
+            mainContainer.className = 'container'; // reset
+            if (levelId >= 1 && levelId <= 4) mainContainer.classList.add('theme-blue');
+            else if (levelId >= 5 && levelId <= 8) mainContainer.classList.add('theme-violet');
+            else if (levelId >= 9 && levelId <= 10) mainContainer.classList.add('theme-orange');
+            else mainContainer.classList.add('theme-teal');
+
+            // Reset State
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            isLocked = false;
+            
+            // UI Update
+            updateDisplay();
+            ctrlsPlay.style.display = 'flex';
+            ctrlsEnd.style.display = 'none';
+            msgEl.textContent = "";
+            screens.select.classList.remove('active');
+            screens.game.classList.add('active');
+            
+            // Setup Timer
+            startTimer();
+            
+            // Generate Cards
+            generateGrid(levelWords, config.grid);
+        }
+
+        function generateGrid(pairs, gridSize) {
+            // Duplicate and Shuffle
+            let deck = [];
+            pairs.forEach(p => {
+                deck.push({ ...p, type: 'word' });
+                deck.push({ ...p, type: 'icon' });
             });
-
-            cards = shuffleArray(cards);
-
-            gameGridEl.innerHTML = '';
-            const [cols, rows] = levelData.gridSize.split('x').map(Number); 
             
-            gameGridEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-            gameGridEl.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+            // Fisher-Yates Shuffle
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
             
-            cards.forEach((cardData, index) => {
+            cards = deck;
+            gridEl.innerHTML = '';
+            
+            // grid-template set in CSS (fixed 4 cols), rows auto-flow
+            
+            cards.forEach((card, idx) => {
                 const cardEl = document.createElement('div');
                 cardEl.className = 'card';
-                cardEl.setAttribute('data-index', index);
-                cardEl.setAttribute('data-match-id', cardData.matchId);
-                cardEl.addEventListener('click', handleCardClick);
-
-                const cardInner = document.createElement('div');
-                cardInner.className = 'card-inner';
-
-                const cardFront = document.createElement('div');
-                cardFront.className = 'card-front';
+                cardEl.dataset.idx = idx;
+                cardEl.onclick = handleCardClick;
                 
-                if (cardData.type === 'word') {
-                     cardFront.textContent = cardData.content;
-                } else {
-                    const iconSpan = document.createElement('span');
-                    iconSpan.className = 'card-content-icon';
-                    iconSpan.textContent = cardData.content;
-                    cardFront.appendChild(iconSpan);
-                }
+                // Content
+                const content = card.type === 'word' 
+                    ? card.word 
+                    : `<span class="card-content-icon">${card.icon}</span>`;
 
-                const cardBack = document.createElement('div');
-                cardBack.className = 'card-back';
-                cardBack.textContent = '?';
-
-                cardInner.appendChild(cardBack);
-                cardInner.appendChild(cardFront);
-                cardEl.appendChild(cardInner);
-                gameGridEl.appendChild(cardEl);
+                cardEl.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">${content}</div>
+                        <div class="card-back"></div>
+                    </div>
+                `;
+                gridEl.appendChild(cardEl);
             });
         }
-        
-        function goToLevelSelect() {
-            stopTimer();
-            showScreen('level-select-screen');
-        }
 
-
-        // --- GAME FLOW ---
-        
-        function applyLevelTheme(level) {
-            mainContainerEl.classList.remove('level-5-8-theme', 'level-9-10-theme', 'level-11-12-theme');
-            // ธีมใหม่: L1-L4 (Blue), L5-L8 (Violet), L9-L10 (Orange), L11-L12 (Teal)
-            if (level >= 5 && level <= 8) {
-                mainContainerEl.classList.add('level-5-8-theme');
-            } else if (level >= 9 && level <= 10) {
-                mainContainerEl.classList.add('level-9-10-theme');
-            } else if (level >= 11 && level <= 12) {
-                mainContainerEl.classList.add('level-11-12-theme');
-            } else {
-                 mainContainerEl.classList.remove('level-5-8-theme', 'level-9-10-theme', 'level-11-12-theme');
-            }
-        }
-        
-        function startGame(level) {
-            currentLevel = level;
-            const levelData = newLevels.find(d => d.level === level); 
-            if (!levelData) { console.error("Level data not found:", level); return; }
+        function handleCardClick(e) {
+            if (isLocked) return;
+            const cardEl = e.currentTarget;
+            const idx = parseInt(cardEl.dataset.idx);
             
-            applyLevelTheme(level);
-
-            matchedPairs = 0;
-            totalFlips = 0;
-            gameLocked = false;
-            timeElapsed = 0;
-            updateStats();
-            messageAreaEl.textContent = "";
-            messageAreaEl.style.fontSize = '1rem';
-            
-            // **แก้ไข:** ซ่อน end-game-controls และแสดง play-controls
-            endGameControlsEl.style.display = 'none';
-            document.getElementById('play-controls').style.display = 'flex';
-            
-            // ปรับขนาดปุ่มกลับหน้าหลักให้เต็ม 100% (CSS จัดการแล้ว)
-            
-            // ซ่อนปุ่ม Next Level ถ้าถึง Level สุดท้าย
-            if (currentLevel === newLevels.length) {
-                 nextLevelBtn.style.display = 'none';
-            } else {
-                 nextLevelBtn.style.display = 'block'; 
-            }
-            
-            window.speechSynthesis.cancel(); 
-
-            levelInfoEl.textContent = `Level ${level}: ${levelData.gridSize}`;
-            
-            setupCards(levelData);
-            showScreen('game-screen');
-            startTimer();
-        }
-
-        function handleCardClick(event) {
-            if (gameLocked || isSpeaking) return; 
-            
-            const cardEl = event.currentTarget;
-            const cardIndex = parseInt(cardEl.getAttribute('data-index'));
-            const cardData = cards[cardIndex];
-
+            // Ignore if same card or already matched
             if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
-            
+
+            // Flip
+            playTickSound();
             cardEl.classList.add('flipped');
-            flippedCards.push({ cardEl, cardData });
-            
+            flippedCards.push({ idx, el: cardEl, data: cards[idx] });
+
             if (flippedCards.length === 2) {
-                gameLocked = true;
-                totalFlips++;
-                updateStats();
-                checkForMatch();
+                isLocked = true;
+                moves++;
+                updateDisplay();
+                checkMatch();
             }
         }
 
-        function checkForMatch() {
-            const card1 = flippedCards[0].cardData;
-            const card2 = flippedCards[1].cardData;
-            const card1El = flippedCards[0].cardEl;
-            const card2El = flippedCards[1].cardEl;
-            
-            const isMatch = (card1.matchId === card2.matchId) && (card1.type !== card2.type);
-            const wordToSpeak = card1.type === 'word' ? card1.content : card2.content;
-            const currentLevelData = newLevels.find(d => d.level === currentLevel); 
-
+        function checkMatch() {
+            const [c1, c2] = flippedCards;
+            const isMatch = (c1.data.matchId === c2.data.matchId);
 
             if (isMatch) {
-                // SUCCESS
-                score += 1; 
                 matchedPairs++;
+                playSuccessSound();
                 
-                playSound('success');
+                c1.el.querySelector('.card-inner').classList.add('matched-correct');
+                c2.el.querySelector('.card-inner').classList.add('matched-correct');
                 
-                card1El.classList.add('matched-correct');
-                card2El.classList.add('matched-correct');
+                const word = c1.data.type === 'word' ? c1.data.word : c2.data.word;
+                msgEl.innerHTML = `<span class="text-success">Excellent! ${word}</span>`;
                 
-                messageAreaEl.textContent = `🎉 MATCH! (${wordToSpeak}) คู่ที่ ${matchedPairs}/${currentLevelData.words.length}`;
-                messageAreaEl.style.color = 'var(--color-correct)';
-                
-                speakWord(wordToSpeak, () => {
+                speak(word, () => {
                     setTimeout(() => {
-                        card1El.classList.add('matched');
-                        card2El.classList.add('matched');
+                        c1.el.classList.add('matched');
+                        c2.el.classList.add('matched');
+                        c1.el.querySelector('.card-inner').classList.remove('matched-correct');
+                        c2.el.querySelector('.card-inner').classList.remove('matched-correct');
                         
-                        card1El.classList.remove('matched-correct');
-                        card2El.classList.remove('matched-correct');
-                        
-                        gameLocked = false;
                         flippedCards = [];
-                        checkWinCondition();
-                    }, 1000); 
+                        isLocked = false;
+                        
+                        const totalPairs = LEVELS_CONFIG.find(l => l.id === currentLevelId).count;
+                        if (matchedPairs === totalPairs) handleWin();
+                    }, 500);
                 });
-                
             } else {
-                // ERROR
-                playSound('error'); 
+                playErrorSound();
+                msgEl.innerHTML = `<span class="text-error">Try again!</span>`;
                 
-                const inner1 = card1El.querySelector('.card-inner');
-                const inner2 = card2El.querySelector('.card-inner');
-                
-                inner1.classList.add('shake-error');
-                inner2.classList.add('shake-error');
-                
-                messageAreaEl.textContent = `❌ ผิดพลาด! ลองใหม่อีกครั้ง`;
-                messageAreaEl.style.color = 'var(--color-wrong)';
-                
+                c1.el.querySelector('.card-inner').classList.add('shake-error');
+                c2.el.querySelector('.card-inner').classList.add('shake-error');
+
                 setTimeout(() => {
-                    card1El.classList.remove('flipped');
-                    card2El.classList.remove('flipped');
-                    
-                    inner1.classList.remove('shake-error');
-                    inner2.classList.remove('shake-error');
-                    
-                    gameLocked = false;
+                    c1.el.classList.remove('flipped');
+                    c2.el.classList.remove('flipped');
+                    c1.el.querySelector('.card-inner').classList.remove('shake-error');
+                    c2.el.querySelector('.card-inner').classList.remove('shake-error');
+                    msgEl.textContent = "";
                     flippedCards = [];
-                }, 1200);
+                    isLocked = false;
+                }, 1000);
             }
         }
 
-        function checkWinCondition() {
-            const currentLevelData = newLevels.find(d => d.level === currentLevel);
-            const totalPairs = currentLevelData ? currentLevelData.words.length : 0;
+        function handleWin() {
+            clearInterval(timerInterval);
+            msgEl.innerHTML = `<span class="text-success">🎉 Level Complete!</span>`;
             
-            if (matchedPairs === totalPairs) {
-                stopTimer();
-                window.speechSynthesis.cancel();
-                messageAreaEl.textContent = `🏆 ชนะแล้ว! ใช้เวลา ${timeElapsed.toFixed(2)} วินาที และเปิดไพ่ ${totalFlips} ครั้ง!`;
-                messageAreaEl.style.fontSize = '1.2rem';
-                messageAreaEl.style.color = 'var(--color-primary)';
-                
-                // **แก้ไข:** ซ่อน play-controls และแสดง end-game-controls
-                document.getElementById('play-controls').style.display = 'none';
-                endGameControlsEl.style.display = 'flex';
-                
-                if (currentLevel === newLevels.length) {
-                    nextLevelBtn.style.display = 'none';
-                    messageAreaEl.textContent += ` (คุณเล่นครบทุก Level แล้ว!)`;
-                } else {
-                    nextLevelBtn.style.display = 'block';
-                }
-                
-                // แสดงปุ่มกลับหน้าหลักเมื่อจบเกม
-                mainMenuBtnEnd.style.display = 'block';
+            // Hide Play Controls, Show End Controls
+            ctrlsPlay.style.display = 'none';
+            ctrlsEnd.style.display = 'flex';
+            
+            // Hide Next Level button if it's the last level
+            const nextBtn = document.getElementById('next-level-btn');
+            if (currentLevelId === LEVELS_CONFIG.length) {
+                nextBtn.style.display = 'none';
+                msgEl.innerHTML += "<br>🏆 All Levels Cleared!";
+            } else {
+                nextBtn.style.display = 'flex';
             }
         }
 
-        // --- INITIAL SETUP ---
-        document.addEventListener('DOMContentLoaded', () => {
-            setupSpeech();
-            createLevelButtons(); 
+        // --- UTILS ---
+        function showMainMenu() {
+            clearInterval(timerInterval);
+            speechSynth.cancel();
+            screens.game.classList.remove('active');
+            screens.select.classList.add('active');
+        }
 
-            // Bind Control Buttons
-            document.getElementById('main-menu-btn-play').addEventListener('click', goToLevelSelect);
-            
-            // Bind ปุ่มกลับหน้าหลักเมื่อจบเกม
-            document.getElementById('main-menu-btn-end').addEventListener('click', goToLevelSelect); 
-            
-            document.getElementById('play-again-btn').addEventListener('click', () => {
-                startGame(currentLevel); 
-            });
-            document.getElementById('next-level-btn').addEventListener('click', () => {
-                if (currentLevel < newLevels.length) {
-                    startGame(currentLevel + 1);
-                } else {
-                    goToLevelSelect();
-                }
-            });
+        function startTimer() {
+            startTime = Date.now();
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const delta = Math.floor((Date.now() - startTime) / 1000);
+                const m = String(Math.floor(delta / 60)).padStart(2, '0');
+                const s = String(delta % 60).padStart(2, '0');
+                dispTime.textContent = `${m}:${s}`;
+            }, 1000);
+        }
 
-            // Bind level selection click handler
-            levelGridSelectEl.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON' && e.target.closest('#level-grid-select')) {
-                    const levelId = parseInt(e.target.getAttribute('data-level'));
-                    if (!isNaN(levelId)) {
-                        startGame(levelId);
-                    }
-                }
-            });
+        function updateDisplay() {
+            dispLevel.textContent = currentLevelId;
+            dispMoves.textContent = moves;
+        }
 
-            showScreen('level-select-screen');
-        });
+        // --- AUDIO / TTS ---
+        function speak(text, callback) {
+            speechSynth.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.onend = () => { if(callback) callback(); };
+            utterance.onerror = () => { if(callback) callback(); };
+            speechSynth.speak(utterance);
+        }
+
+        // Simple Beeps using Web Audio API (No external files needed)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playTone(freq, type, duration) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playTickSound() { playTone(600, 'sine', 0.1); }
+        function playSuccessSound() { 
+            playTone(800, 'sine', 0.1); 
+            setTimeout(() => playTone(1200, 'sine', 0.2), 100);
+        }
+        function playErrorSound() { playTone(200, 'sawtooth', 0.3); }
+
+        // Start
+        init();
     </script>
 </body>
 </html>
