@@ -8,28 +8,17 @@
     <style>
         /* --- MODERN THEME VARIABLES --- */
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Deep Purple/Blue */
-            --secondary-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); /* Soft Pink */
-            --accent-gradient: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%); /* Mint/Blue */
-            
-            --bg-color: #f0f4f8;
+            --bg-color: #FFF9C4; /* Default Menu: Light Yellow */
             --surface-color: #ffffff;
             --text-main: #2d3748;
             --text-muted: #718096;
             
             --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
             
             --radius-card: 12px;
             --radius-btn: 50px;
         }
-
-        /* Level Specific Gradients */
-        .theme-blue { --card-back-bg: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-        .theme-violet { --card-back-bg: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
-        .theme-orange { --card-back-bg: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
-        .theme-teal { --card-back-bg: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
 
         /* --- BASE STYLES --- */
         body {
@@ -42,23 +31,25 @@
             justify-content: center;
             min-height: 100vh;
             overflow-x: hidden;
+            transition: background-color 0.5s ease;
             -webkit-tap-highlight-color: transparent;
         }
 
         .container {
             width: 100%;
-            max-width: 480px; /* Mobile optimal width */
-            background-color: var(--surface-color);
+            max-width: 480px; 
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent */
+            backdrop-filter: blur(10px);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
             position: relative;
         }
 
         /* --- HEADER --- */
         header {
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 1rem;
             text-align: center;
@@ -66,12 +57,12 @@
             border-bottom-right-radius: 20px;
             box-shadow: var(--shadow-md);
             z-index: 10;
+            transition: background 0.5s;
         }
         header h1 { 
             font-size: 1.5rem; 
             margin: 0; 
             font-weight: 800; 
-            letter-spacing: 0.5px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
@@ -90,7 +81,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h2 { text-align: center; color: var(--text-main); font-weight: 800; margin-bottom: 0.5rem; }
+        h2 { text-align: center; color: var(--text-main); font-weight: 800; margin-bottom: 0.5rem; margin-top: 0; }
         p { text-align: center; color: var(--text-muted); margin-top: 0; font-size: 0.9rem; }
 
         /* --- LEVEL GRID --- */
@@ -101,20 +92,20 @@
             padding: 10px 0;
         }
 
-        /* --- GAME GRID (The Gameplay) --- */
+        /* --- GAME GRID --- */
         #game-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 Columns Fixed */
+            grid-template-columns: repeat(4, 1fr); 
             gap: 8px;
             width: 100%;
             margin: 0 auto;
-            flex-grow: 1; /* Push controls down */
             align-content: start;
         }
 
-        /* --- CARDS (Modernized) --- */
+        /* --- CARDS (Fixed Aspect Ratio 1:1) --- */
         .card {
-            aspect-ratio: 1 / 1.1; /* Maintain ratio, prevent squishing */
+            aspect-ratio: 1 / 1; /* Force Square */
+            width: 100%;
             perspective: 1000px;
             cursor: pointer;
             position: relative;
@@ -143,13 +134,13 @@
             align-items: center;
             border-radius: var(--radius-card);
             font-weight: 800;
-            padding: 4px;
+            padding: 2px;
             box-sizing: border-box;
             text-align: center;
             overflow: hidden;
         }
 
-        /* Back of Card (Pattern) */
+        /* Back of Card */
         .card-back {
             background: var(--card-back-bg, #cbd5e0);
             color: white;
@@ -157,36 +148,33 @@
             border: 2px solid white;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
         }
-        .card-back::after {
-            content: "?";
-            opacity: 0.8;
-        }
+        .card-back::after { content: "?"; opacity: 0.8; }
 
-        /* Front of Card (Content) */
+        /* Front of Card */
         .card-front {
             background-color: white;
             color: var(--text-main);
             transform: rotateY(180deg);
             border: 2px solid #e2e8f0;
-            font-size: 0.9rem; /* Smaller text for words */
+            font-size: 0.8rem; /* Responsive Font */
             word-break: break-word;
             line-height: 1.1;
         }
         
-        .card-content-icon { font-size: 2rem; }
+        /* Responsive Icon Size */
+        .card-content-icon { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+        .card-content-text { font-size: clamp(0.7rem, 2.5vw, 1rem); }
 
-        /* Correct Match */
+        /* Match Effects */
         .card.matched .card-inner { 
-            box-shadow: 0 0 0 3px #48bb78; /* Green ring */
+            box-shadow: 0 0 0 3px #48bb78; 
             opacity: 0.6;
             transform: rotateY(180deg) scale(0.95);
         }
 
-        /* Animations */
         @keyframes jump {
-            0% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
             50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
         }
         .card.matched-correct { animation: jump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
@@ -197,122 +185,108 @@
         }
         .card-inner.shake-error { animation: shake 0.4s ease-in-out; border: 2px solid #fc8181; }
 
-        /* --- STATUS BAR --- */
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
+        /* --- SUMMARY SCREEN (New) --- */
+        #summary-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 Columns */
+            gap: 10px;
+            padding: 10px 0;
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+        .summary-item {
             background: white;
-            padding: 10px 15px;
-            border-radius: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             box-shadow: var(--shadow-sm);
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
         }
-        .status-item span {
-            display: block;
-            font-weight: 800;
-            color: var(--text-main);
-            font-size: 1rem;
-        }
+        .sum-icon { font-size: 1.5rem; }
+        .sum-text { display: flex; flex-direction: column; text-align: left; }
+        .sum-en { font-weight: 800; font-size: 0.9rem; color: var(--text-main); }
+        .sum-th { font-size: 0.8rem; color: var(--text-muted); }
 
-        /* --- BUTTONS (Modern UI) --- */
+        /* --- BUTTONS --- */
         .control-btn {
             border: none;
-            padding: 12px 10px;
+            padding: 12px;
             border-radius: var(--radius-btn);
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
             color: white;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
             position: relative;
-            overflow: hidden;
         }
+        .control-btn:active { transform: translateY(2px); }
 
-        .control-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 3px rgba(50, 50, 93, 0.1);
-        }
-
-        /* Button Variants */
-        .btn-level {
-            font-size: 0.9rem;
-            padding: 15px 5px;
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-        }
-        
-        /* Level Colors */
+        /* Theme Buttons */
         .btn-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .btn-violet { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
         .btn-orange { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
         .btn-teal { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .btn-red { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
 
-        .btn-back { 
-            background: white; 
-            color: var(--text-main); 
-            border: 2px solid #e2e8f0; 
-            box-shadow: none;
-        }
-        .btn-back:hover { background: #f7fafc; }
-
-        .btn-primary { background: var(--primary-gradient); }
-        .btn-success { background: var(--accent-gradient); color: #0f5132; }
+        .btn-back { background: white; color: var(--text-main); border: 2px solid #e2e8f0; box-shadow: none; }
+        .btn-success { background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%); color: #0f5132; }
+        .btn-play { background: #48bb78; color: white; margin-top: 10px; }
 
         /* Controls Layout */
-        #game-controls {
-            margin-top: auto; /* Push to bottom */
-            padding-top: 10px;
-            width: 100%;
-        }
-
-        #play-controls, #end-game-controls {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        #game-controls { margin-top: auto; padding-top: 10px; width: 100%; }
+        #play-controls, #end-game-controls { width: 100%; display: flex; flex-direction: column; gap: 10px; }
         
         /* Message Area */
-        #message-area {
-            text-align: center;
-            min-height: 24px;
-            margin: 10px 0;
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--text-main);
+        #message-area { text-align: center; min-height: 24px; margin: 10px 0; font-weight: 600; }
+        .text-success { color: #38a169; }
+        .text-error { color: #e53e3e; }
+        
+        /* Status Bar */
+        .status-bar {
+            display: flex; justify-content: space-between; background: white;
+            padding: 10px 15px; border-radius: 15px; margin-bottom: 10px;
+            font-size: 0.85rem; color: var(--text-muted); box-shadow: var(--shadow-sm);
         }
-        .text-success { color: #38a169 !important; }
-        .text-error { color: #e53e3e !important; }
+        .status-item span { display: block; font-weight: 800; color: var(--text-main); font-size: 1rem; }
 
     </style>
 </head>
 <body>
     <div class="container" id="main-container">
-        <header>
+        <header id="main-header">
             <h1>Word Icons Match ✨</h1>
         </header>
 
         <div id="level-select-screen" class="screen active">
             <h2>เลือกระดับความยาก</h2>
-            <p>12 Levels • 4 Columns Mode</p>
+            <p>15 Levels • ฝึกคำศัพท์พร้อมคำแปล</p>
             <div id="level-grid-select">
                 </div>
+        </div>
+
+        <div id="summary-screen" class="screen">
+            <h2>ศัพท์น่ารู้ Level <span id="sum-lvl-id"></span></h2>
+            <div id="summary-list">
+                </div>
+            <button id="start-game-btn" class="control-btn btn-play">
+                <span>🎮 เริ่มเล่นเกม</span>
+            </button>
+            <button id="back-from-sum-btn" class="control-btn btn-back" style="margin-top:10px;">
+                <span>⬅️ กลับ</span>
+            </button>
         </div>
         
         <div id="game-screen" class="screen">
             <div class="status-bar">
                 <div class="status-item">Level <span id="level-disp">1</span></div>
-                <div class="status-item">Moves <span id="flips-disp">0</span></div>
-                <div class="status-item">Time <span id="time-disp">00:00</span></div>
+                <div class="status-item">คู่ที่ <span id="pairs-disp">0/0</span></div>
+                <div class="status-item">เวลา <span id="time-disp">00:00</span></div>
             </div>
             
             <div id="game-grid">
@@ -329,9 +303,9 @@
 
                 <div id="end-game-controls" style="display: none;">
                     <button id="play-again-btn" class="control-btn btn-success">
-                        <span>🔄 เล่นใหม่ (ชุดนี้)</span>
+                        <span>🔄 เล่นใหม่</span>
                     </button>
-                    <button id="next-level-btn" class="control-btn btn-primary">
+                    <button id="next-level-btn" class="control-btn btn-blue" style="color: white;">
                         <span>▶️ Level ถัดไป</span>
                     </button>
                     <button id="main-menu-btn-end" class="control-btn btn-back">
@@ -343,68 +317,96 @@
     </div>
 
     <script>
-        // --- DATA: 12 LEVELS (60 Pairs + 12 New Pairs = 72 Pairs Total) ---
-        // Updated to ensure distinct words for all 12 levels
+        // --- DATA: 15 LEVELS (Updated with Thai Translation) ---
+        const createData = (w, i, id, th) => ({ word: w, icon: i, matchId: id, thai: th });
         
-        // Helper to create card data
-        const createData = (w, i, id) => ({ word: w, icon: i, matchId: id });
-        
-        const RAW_PAIRS = [
-            // Level 1 (6)
-            createData("CAT", "🐱", 1), createData("DOG", "🐶", 2), createData("CAR", "🚗", 3),
-            createData("SUN", "☀️", 4), createData("TREE", "🌳", 5), createData("BALL", "⚽", 6),
-            // Level 2 (6)
-            createData("APPLE", "🍎", 7), createData("BANANA", "🍌", 8), createData("RED", "🔴", 9),
-            createData("BLUE", "🔵", 10), createData("HOUSE", "🏠", 11), createData("CLOCK", "⏰", 12),
-            // Level 3 (6)
-            createData("WALK", "🚶", 13), createData("RUN", "🏃", 14), createData("SIT", "🪑", 15),
-            createData("SLEEP", "😴", 16), createData("DRINK", "🥛", 17), createData("EAT", "🍽️", 18),
-            // Level 4 (6)
-            createData("GIFT", "🎁", 19), createData("LOVE", "❤️", 20), createData("HAPPY", "😊", 21),
-            createData("SAD", "😔", 22), createData("IDEA", "💡", 23), createData("KEY", "🔑", 24),
-            
-            // Level 5 (8)
-            createData("MONEY", "💰", 25), createData("TICKET", "🎫", 26), createData("PEN", "🖊️", 27),
-            createData("CUP", "☕", 28), createData("FLAG", "🚩", 29), createData("WATER", "💧", 30),
-            createData("FIRE", "🔥", 31), createData("BOOK", "📚", 32),
-            // Level 6 (8)
-            createData("CLOUD", "☁️", 33), createData("RAIN", "🌧️", 34), createData("SNOW", "❄️", 35),
-            createData("FLOWER", "🌸", 36), createData("MTN", "⛰️", 37), createData("MOON", "🌕", 38),
-            createData("ROAD", "🛣️", 39), createData("BOAT", "⛵", 40),
-            // Level 7 (8)
-            createData("DOCTOR", "🧑‍⚕️", 41), createData("POLICE", "👮", 42), createData("CHEF", "🧑‍🍳", 43),
-            createData("KING", "👑", 44), createData("FAMILY", "👪", 45), createData("BABY", "👶", 46),
-            createData("HAND", "✋", 47), createData("EYE", "👁️", 48),
-            // Level 8 (8)
-            createData("EAR", "👂", 49), createData("PC", "🖥️", 50), createData("MOUSE", "🖱️", 51),
-            createData("MAIL", "📧", 52), createData("DATE", "📅", 53), createData("BUS", "🚌", 54),
-            createData("TRUCK", "🚚", 55), createData("PIZZA", "🍕", 56),
-
-            // Level 9 (10)
-            createData("WINE", "🍷", 57), createData("BEER", "🍺", 58), createData("SHIRT", "👕", 59),
-            createData("CAM", "📷", 60), createData("VIDEO", "📹", 61), createData("NOTE", "📝", 62),
-            createData("MATH", "🧮", 63), createData("GLOBE", "🌍", 64), createData("BAG", "👜", 65),
-            createData("BIKE", "🚲", 66),
-            // Level 10 (10)
-            createData("TRAIN", "🚂", 67), createData("TENT", "⛺", 68), createData("WIFI", "📶", 69),
-            createData("LOCK", "🔒", 70), createData("OPEN", "🔓", 71), createData("UP", "⬆️", 72),
-            createData("DOWN", "⬇️", 73), createData("PLUS", "➕", 74), createData("MINUS", "➖", 75),
-            createData("STAR", "⭐", 76),
-
-            // Level 11 (12 Pairs - 4x6)
-            createData("GAME", "🎮", 77), createData("MUSIC", "🎵", 78), createData("MUTE", "🔇", 79),
-            createData("LOUD", "🔊", 80), createData("LAMP", "🛋️", 81), createData("BED", "🛏️", 82),
-            createData("BATH", "🛁", 83), createData("TOILET", "🚽", 84), createData("EARTH", "🌎", 85),
-            createData("MARS", "🔴", 86), createData("RING", "💍", 87), createData("GEM", "💎", 88),
-            
-            // Level 12 (12 Pairs - 4x6)
-            createData("SHIELD", "🛡️", 89), createData("SWORD", "⚔️", 90), createData("CROWN", "👑", 91),
-            createData("CASTLE", "🏰", 92), createData("GHOST", "👻", 93), createData("WITCH", "🧙", 94),
-            createData("ALIEN", "👽", 95), createData("ROBOT", "🤖", 96), createData("SKULL", "💀", 97),
-            createData("BOMB", "💣", 98), createData("ROCKET", "🚀", 99), createData("UFO", "🛸", 100)
+        const ALL_WORDS = [
+            // L1 (6)
+            createData("CAT", "🐱", 1, "แมว"), createData("DOG", "🐶", 2, "สุนัข"), 
+            createData("CAR", "🚗", 3, "รถยนต์"), createData("SUN", "☀️", 4, "พระอาทิตย์"), 
+            createData("TREE", "🌳", 5, "ต้นไม้"), createData("BALL", "⚽", 6, "ลูกบอล"),
+            // L2 (6)
+            createData("APPLE", "🍎", 7, "แอปเปิ้ล"), createData("BANANA", "🍌", 8, "กล้วย"), 
+            createData("RED", "🔴", 9, "สีแดง"), createData("BLUE", "🔵", 10, "สีน้ำเงิน"), 
+            createData("HOUSE", "🏠", 11, "บ้าน"), createData("CLOCK", "⏰", 12, "นาฬิกา"),
+            // L3 (6)
+            createData("WALK", "🚶", 13, "เดิน"), createData("RUN", "🏃", 14, "วิ่ง"), 
+            createData("SIT", "🪑", 15, "นั่ง"), createData("SLEEP", "😴", 16, "นอนหลับ"), 
+            createData("DRINK", "🥛", 17, "ดื่ม"), createData("EAT", "🍽️", 18, "กิน"),
+            // L4 (6)
+            createData("GIFT", "🎁", 19, "ของขวัญ"), createData("LOVE", "❤️", 20, "ความรัก"), 
+            createData("HAPPY", "😊", 21, "มีความสุข"), createData("SAD", "😔", 22, "เสียใจ"), 
+            createData("IDEA", "💡", 23, "ความคิด"), createData("KEY", "🔑", 24, "กุญแจ"),
+            // L5 (8)
+            createData("MONEY", "💰", 25, "เงิน"), createData("TICKET", "🎫", 26, "ตั๋ว"), 
+            createData("PEN", "🖊️", 27, "ปากกา"), createData("CUP", "☕", 28, "ถ้วยกาแฟ"), 
+            createData("FLAG", "🚩", 29, "ธง"), createData("WATER", "💧", 30, "น้ำ"),
+            createData("FIRE", "🔥", 31, "ไฟ"), createData("BOOK", "📚", 32, "หนังสือ"),
+            // L6 (8)
+            createData("CLOUD", "☁️", 33, "เมฆ"), createData("RAIN", "🌧️", 34, "ฝน"), 
+            createData("SNOW", "❄️", 35, "หิมะ"), createData("FLOWER", "🌸", 36, "ดอกไม้"), 
+            createData("MOUNTAIN", "⛰️", 37, "ภูเขา"), createData("MOON", "🌕", 38, "พระจันทร์"),
+            createData("ROAD", "🛣️", 39, "ถนน"), createData("BOAT", "⛵", 40, "เรือ"),
+            // L7 (8)
+            createData("DOCTOR", "🧑‍⚕️", 41, "หมอ"), createData("POLICE", "👮", 42, "ตำรวจ"), 
+            createData("CHEF", "🧑‍🍳", 43, "พ่อครัว"), createData("KING", "👑", 44, "ราชา"), 
+            createData("FAMILY", "👪", 45, "ครอบครัว"), createData("BABY", "👶", 46, "ทารก"),
+            createData("HAND", "✋", 47, "มือ"), createData("EYE", "👁️", 48, "ตา"),
+            // L8 (8)
+            createData("EAR", "👂", 49, "หู"), createData("COMPUTER", "🖥️", 50, "คอมพิวเตอร์"), 
+            createData("MOUSE", "🖱️", 51, "เมาส์"), createData("EMAIL", "📧", 52, "อีเมล"), 
+            createData("CALENDAR", "📅", 53, "ปฏิทิน"), createData("BUS", "🚌", 54, "รถบัส"),
+            createData("TRUCK", "🚚", 55, "รถบรรทุก"), createData("PIZZA", "🍕", 56, "พิซซ่า"),
+            // L9 (10)
+            createData("WINE", "🍷", 57, "ไวน์"), createData("BEER", "🍺", 58, "เบียร์"), 
+            createData("SHIRT", "👕", 59, "เสื้อเชิ้ต"), createData("CAMERA", "📷", 60, "กล้อง"), 
+            createData("VIDEO", "📹", 61, "วิดีโอ"), createData("NOTE", "📝", 62, "โน้ต"),
+            createData("MATH", "🧮", 63, "คณิตศาสตร์"), createData("GLOBE", "🌍", 64, "ลูกโลก"), 
+            createData("BAG", "👜", 65, "กระเป๋า"), createData("BIKE", "🚲", 66, "จักรยาน"),
+            // L10 (10)
+            createData("TRAIN", "🚂", 67, "รถไฟ"), createData("TENT", "⛺", 68, "เต็นท์"), 
+            createData("WIFI", "📶", 69, "ไวไฟ"), createData("LOCK", "🔒", 70, "ล็อค"), 
+            createData("OPEN", "🔓", 71, "เปิด"), createData("UP", "⬆️", 72, "ขึ้น"),
+            createData("DOWN", "⬇️", 73, "ลง"), createData("PLUS", "➕", 74, "บวก"), 
+            createData("MINUS", "➖", 75, "ลบ"), createData("STAR", "⭐", 76, "ดาว"),
+            // L11 (12)
+            createData("GAME", "🎮", 77, "เกม"), createData("MUSIC", "🎵", 78, "ดนตรี"), 
+            createData("MUTE", "🔇", 79, "ปิดเสียง"), createData("LOUD", "🔊", 80, "เสียงดัง"), 
+            createData("LAMP", "🛋️", 81, "โคมไฟ"), createData("BED", "🛏️", 82, "เตียง"),
+            createData("BATH", "🛁", 83, "อ่างอาบน้ำ"), createData("TOILET", "🚽", 84, "ชักโครก"), 
+            createData("EARTH", "🌎", 85, "โลก"), createData("MARS", "🔴", 86, "ดาวอังคาร"), 
+            createData("RING", "💍", 87, "แหวน"), createData("DIAMOND", "💎", 88, "เพชร"),
+            // L12 (12)
+            createData("SHIELD", "🛡️", 89, "โล่"), createData("SWORD", "⚔️", 90, "ดาบ"), 
+            createData("CROWN", "👑", 91, "มงกุฎ"), createData("CASTLE", "🏰", 92, "ปราสาท"), 
+            createData("GHOST", "👻", 93, "ผี"), createData("WITCH", "🧙", 94, "แม่มด"),
+            createData("ALIEN", "👽", 95, "มนุษย์ต่างดาว"), createData("ROBOT", "🤖", 96, "หุ่นยนต์"), 
+            createData("SKULL", "💀", 97, "กะโหลก"), createData("BOMB", "💣", 98, "ระเบิด"), 
+            createData("ROCKET", "🚀", 99, "จรวด"), createData("UFO", "🛸", 100, "ยูเอฟโอ"),
+            // L13 (12) - Animals II
+            createData("LION", "🦁", 101, "สิงโต"), createData("TIGER", "🐯", 102, "เสือ"), 
+            createData("BEAR", "🐻", 103, "หมี"), createData("ELEPHANT", "🐘", 104, "ช้าง"), 
+            createData("MONKEY", "🐵", 105, "ลิง"), createData("PANDA", "🐼", 106, "แพนด้า"), 
+            createData("KOALA", "🐨", 107, "โคอาล่า"), createData("PIG", "🐷", 108, "หมู"),
+            createData("FOX", "🦊", 109, "สุนัขจิ้งจอก"), createData("RABBIT", "🐰", 110, "กระต่าย"),
+            createData("CHICKEN", "🐔", 111, "ไก่"), createData("DUCK", "🦆", 112, "เป็ด"),
+            // L14 (12) - Fruits & Veg
+            createData("GRAPE", "🍇", 113, "องุ่น"), createData("MELON", "🍈", 114, "เมล่อน"), 
+            createData("LEMON", "🍋", 115, "มะนาว"), createData("PEACH", "🍑", 116, "ลูกพีช"), 
+            createData("CHERRY", "🍒", 117, "เชอร์รี่"), createData("STRAWBERRY", "🍓", 118, "สตรอว์เบอร์รี"), 
+            createData("KIWI", "🥝", 119, "กีวี่"), createData("CORN", "🌽", 120, "ข้าวโพด"),
+            createData("CARROT", "🥕", 121, "แครอท"), createData("POTATO", "🥔", 122, "มันฝรั่ง"),
+            createData("TOMATO", "🍅", 123, "มะเขือเทศ"), createData("ONION", "🧅", 124, "หอมหัวใหญ่"),
+            // L15 (12) - Clothes & Accessories
+            createData("GLASSES", "👓", 125, "แว่นตา"), createData("SUNGLASSES", "🕶️", 126, "แว่นกันแดด"),
+            createData("TIE", "👔", 127, "เนคไท"), createData("JEANS", "👖", 128, "กางเกงยีนส์"),
+            createData("DRESS", "👗", 129, "ชุดเดรส"), createData("BIKINI", "👙", 130, "บิกินี่"),
+            createData("PURSE", "👛", 131, "กระเป๋าใส่เหรียญ"), createData("SHOE", "👞", 132, "รองเท้า"),
+            createData("SNEAKER", "👟", 133, "รองเท้าผ้าใบ"), createData("HIGH HEEL", "👠", 134, "รองเท้าส้นสูง"),
+            createData("BOOT", "👢", 135, "รองเท้าบูท"), createData("CAP", "🧢", 136, "หมวกแก๊ป")
         ];
 
-        // Define Levels configuration
+        // Level Configuration
         const LEVELS_CONFIG = [
             { id: 1, grid: '4x3', startIdx: 0, count: 6 },
             { id: 2, grid: '4x3', startIdx: 6, count: 6 },
@@ -417,7 +419,10 @@
             { id: 9, grid: '4x5', startIdx: 56, count: 10 },
             { id: 10, grid: '4x5', startIdx: 66, count: 10 },
             { id: 11, grid: '4x6', startIdx: 76, count: 12 },
-            { id: 12, grid: '4x6', startIdx: 88, count: 12 }
+            { id: 12, grid: '4x6', startIdx: 88, count: 12 },
+            { id: 13, grid: '4x6', startIdx: 100, count: 12 }, // New
+            { id: 14, grid: '4x6', startIdx: 112, count: 12 }, // New
+            { id: 15, grid: '4x6', startIdx: 124, count: 12 }  // New
         ];
 
         // --- GAME VARIABLES ---
@@ -434,30 +439,25 @@
         // --- DOM ELEMENTS ---
         const screens = {
             select: document.getElementById('level-select-screen'),
+            summary: document.getElementById('summary-screen'),
             game: document.getElementById('game-screen')
         };
         const mainContainer = document.getElementById('main-container');
-        const gridEl = document.getElementById('game-grid');
-        const msgEl = document.getElementById('message-area');
+        const mainHeader = document.getElementById('main-header');
         
-        // Displays
-        const dispLevel = document.getElementById('level-disp');
-        const dispMoves = document.getElementById('flips-disp');
-        const dispTime = document.getElementById('time-disp');
-        
-        // Controls
-        const ctrlsPlay = document.getElementById('play-controls');
-        const ctrlsEnd = document.getElementById('end-game-controls');
-
         // --- INITIALIZATION ---
         function init() {
             renderLevelButtons();
             
-            // Event Listeners
+            // Buttons
+            document.getElementById('start-game-btn').onclick = () => launchGame(currentLevelId);
+            document.getElementById('back-from-sum-btn').onclick = showMainMenu;
             document.getElementById('main-menu-btn-play').onclick = showMainMenu;
             document.getElementById('main-menu-btn-end').onclick = showMainMenu;
-            document.getElementById('play-again-btn').onclick = () => startGame(currentLevelId);
-            document.getElementById('next-level-btn').onclick = () => startGame(currentLevelId + 1);
+            document.getElementById('play-again-btn').onclick = () => launchGame(currentLevelId);
+            document.getElementById('next-level-btn').onclick = () => {
+                showSummary(currentLevelId + 1);
+            };
         }
 
         function renderLevelButtons() {
@@ -467,64 +467,87 @@
             LEVELS_CONFIG.forEach(lvl => {
                 const btn = document.createElement('button');
                 
-                // Determine Theme Class
+                // Theme Logic
                 let themeClass = 'btn-blue';
                 if (lvl.id >= 5 && lvl.id <= 8) themeClass = 'btn-violet';
                 if (lvl.id >= 9 && lvl.id <= 10) themeClass = 'btn-orange';
-                if (lvl.id >= 11) themeClass = 'btn-teal';
+                if (lvl.id >= 11 && lvl.id <= 12) themeClass = 'btn-teal';
+                if (lvl.id >= 13) themeClass = 'btn-red';
 
-                btn.className = `control-btn btn-level ${themeClass}`;
-                btn.innerHTML = `<span>Level ${lvl.id}</span><span style="font-size:0.75rem; opacity:0.8">${lvl.grid}</span>`;
-                btn.onclick = () => startGame(lvl.id);
+                btn.className = `control-btn ${themeClass}`;
+                btn.style.flexDirection = 'column';
+                btn.innerHTML = `<span style="font-size:1.1rem">Level ${lvl.id}</span><span style="font-size:0.75rem; opacity:0.9">${lvl.grid}</span>`;
+                btn.onclick = () => showSummary(lvl.id);
                 grid.appendChild(btn);
             });
         }
 
-        // --- GAME LOGIC ---
-        function startGame(levelId) {
-            if (levelId > LEVELS_CONFIG.length) return showMainMenu();
-            
-            currentLevelId = levelId;
-            const config = LEVELS_CONFIG.find(l => l.id === levelId);
-            const levelWords = RAW_PAIRS.slice(config.startIdx, config.startIdx + config.count);
-            
-            // Set Theme
-            mainContainer.className = 'container'; // reset
-            if (levelId >= 1 && levelId <= 4) mainContainer.classList.add('theme-blue');
-            else if (levelId >= 5 && levelId <= 8) mainContainer.classList.add('theme-violet');
-            else if (levelId >= 9 && levelId <= 10) mainContainer.classList.add('theme-orange');
-            else mainContainer.classList.add('theme-teal');
+        // --- FLOW CONTROL ---
 
-            // Reset State
+        // 1. Show Summary (Pre-Game)
+        function showSummary(levelId) {
+            if (levelId > LEVELS_CONFIG.length) return showMainMenu();
+            currentLevelId = levelId;
+            
+            // Apply Theme (Pastel BG)
+            applyTheme(levelId);
+            
+            const config = LEVELS_CONFIG.find(l => l.id === levelId);
+            const words = ALL_WORDS.slice(config.startIdx, config.startIdx + config.count);
+            
+            // Populate Summary List
+            document.getElementById('sum-lvl-id').textContent = levelId;
+            const list = document.getElementById('summary-list');
+            list.innerHTML = '';
+            words.forEach(w => {
+                const item = document.createElement('div');
+                item.className = 'summary-item';
+                item.innerHTML = `
+                    <div class="sum-icon">${w.icon}</div>
+                    <div class="sum-text">
+                        <span class="sum-en">${w.word}</span>
+                        <span class="sum-th">${w.thai}</span>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            switchScreen('summary');
+        }
+
+        // 2. Launch Game
+        function launchGame(levelId) {
+            applyTheme(levelId);
+            const config = LEVELS_CONFIG.find(l => l.id === levelId);
+            const levelWords = ALL_WORDS.slice(config.startIdx, config.startIdx + config.count);
+            
+            // Reset
             flippedCards = [];
             matchedPairs = 0;
             moves = 0;
             isLocked = false;
             
-            // UI Update
-            updateDisplay();
-            ctrlsPlay.style.display = 'flex';
-            ctrlsEnd.style.display = 'none';
-            msgEl.textContent = "";
-            screens.select.classList.remove('active');
-            screens.game.classList.add('active');
-            
-            // Setup Timer
+            // UI
+            document.getElementById('level-disp').textContent = levelId;
+            document.getElementById('pairs-disp').textContent = `0/${config.count}`;
+            document.getElementById('message-area').textContent = "";
+            document.getElementById('game-controls').querySelector('#play-controls').style.display = 'flex';
+            document.getElementById('game-controls').querySelector('#end-game-controls').style.display = 'none';
+
             startTimer();
-            
-            // Generate Cards
-            generateGrid(levelWords, config.grid);
+            generateGrid(levelWords);
+            switchScreen('game');
         }
 
-        function generateGrid(pairs, gridSize) {
-            // Duplicate and Shuffle
+        function generateGrid(pairs) {
+            const gridEl = document.getElementById('game-grid');
             let deck = [];
             pairs.forEach(p => {
                 deck.push({ ...p, type: 'word' });
                 deck.push({ ...p, type: 'icon' });
             });
             
-            // Fisher-Yates Shuffle
+            // Shuffle
             for (let i = deck.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -533,22 +556,19 @@
             cards = deck;
             gridEl.innerHTML = '';
             
-            // grid-template set in CSS (fixed 4 cols), rows auto-flow
-            
             cards.forEach((card, idx) => {
                 const cardEl = document.createElement('div');
                 cardEl.className = 'card';
                 cardEl.dataset.idx = idx;
                 cardEl.onclick = handleCardClick;
                 
-                // Content
-                const content = card.type === 'word' 
-                    ? card.word 
-                    : `<span class="card-content-icon">${card.icon}</span>`;
+                // Adaptive Font Size
+                const contentClass = card.type === 'word' ? 'card-content-text' : 'card-content-icon';
+                const content = card.type === 'word' ? card.word : card.icon;
 
                 cardEl.innerHTML = `
                     <div class="card-inner">
-                        <div class="card-front">${content}</div>
+                        <div class="card-front"><span class="${contentClass}">${content}</span></div>
                         <div class="card-back"></div>
                     </div>
                 `;
@@ -561,18 +581,15 @@
             const cardEl = e.currentTarget;
             const idx = parseInt(cardEl.dataset.idx);
             
-            // Ignore if same card or already matched
             if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
 
-            // Flip
-            playTickSound();
+            playTone(600, 'sine', 0.1);
             cardEl.classList.add('flipped');
             flippedCards.push({ idx, el: cardEl, data: cards[idx] });
 
             if (flippedCards.length === 2) {
                 isLocked = true;
                 moves++;
-                updateDisplay();
                 checkMatch();
             }
         }
@@ -588,10 +605,12 @@
                 c1.el.querySelector('.card-inner').classList.add('matched-correct');
                 c2.el.querySelector('.card-inner').classList.add('matched-correct');
                 
-                const word = c1.data.type === 'word' ? c1.data.word : c2.data.word;
-                msgEl.innerHTML = `<span class="text-success">Excellent! ${word}</span>`;
+                const wordObj = c1.data.type === 'word' ? c1.data : c2.data;
+                document.getElementById('message-area').innerHTML = `<span class="text-success">${wordObj.word} = ${wordObj.thai}</span>`;
+                document.getElementById('pairs-disp').textContent = `${matchedPairs}/${LEVELS_CONFIG.find(l => l.id === currentLevelId).count}`;
                 
-                speak(word, () => {
+                // Speak (Corrected to fix spelling issue)
+                speak(wordObj.word, () => {
                     setTimeout(() => {
                         c1.el.classList.add('matched');
                         c2.el.classList.add('matched');
@@ -607,8 +626,6 @@
                 });
             } else {
                 playErrorSound();
-                msgEl.innerHTML = `<span class="text-error">Try again!</span>`;
-                
                 c1.el.querySelector('.card-inner').classList.add('shake-error');
                 c2.el.querySelector('.card-inner').classList.add('shake-error');
 
@@ -617,7 +634,6 @@
                     c2.el.classList.remove('flipped');
                     c1.el.querySelector('.card-inner').classList.remove('shake-error');
                     c2.el.querySelector('.card-inner').classList.remove('shake-error');
-                    msgEl.textContent = "";
                     flippedCards = [];
                     isLocked = false;
                 }, 1000);
@@ -626,28 +642,63 @@
 
         function handleWin() {
             clearInterval(timerInterval);
-            msgEl.innerHTML = `<span class="text-success">🎉 Level Complete!</span>`;
+            document.getElementById('message-area').innerHTML = `<span class="text-success">🎉 เก่งมาก!</span>`;
             
-            // Hide Play Controls, Show End Controls
-            ctrlsPlay.style.display = 'none';
-            ctrlsEnd.style.display = 'flex';
+            // Switch Controls
+            document.getElementById('play-controls').style.display = 'none';
+            document.getElementById('end-game-controls').style.display = 'flex';
             
-            // Hide Next Level button if it's the last level
-            const nextBtn = document.getElementById('next-level-btn');
             if (currentLevelId === LEVELS_CONFIG.length) {
-                nextBtn.style.display = 'none';
-                msgEl.innerHTML += "<br>🏆 All Levels Cleared!";
+                document.getElementById('next-level-btn').style.display = 'none';
             } else {
-                nextBtn.style.display = 'flex';
+                document.getElementById('next-level-btn').style.display = 'flex';
             }
         }
 
         // --- UTILS ---
+        function switchScreen(screenName) {
+            Object.values(screens).forEach(s => s.classList.remove('active'));
+            screens[screenName].classList.add('active');
+        }
+
         function showMainMenu() {
             clearInterval(timerInterval);
             speechSynth.cancel();
-            screens.game.classList.remove('active');
-            screens.select.classList.add('active');
+            // Reset BG to Light Yellow
+            document.documentElement.style.setProperty('--bg-color', '#FFF9C4');
+            mainHeader.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            document.documentElement.style.setProperty('--card-back-bg', '#1976D2'); // Reset card back
+            switchScreen('select');
+        }
+
+        function applyTheme(levelId) {
+            let bgColor, cardBackBg, headerBg;
+            
+            if (levelId <= 4) { // Blue
+                bgColor = '#E3F2FD'; 
+                cardBackBg = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
+                headerBg = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            } else if (levelId <= 8) { // Pink/Violet
+                bgColor = '#FCE4EC'; 
+                cardBackBg = 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)';
+                headerBg = 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)';
+            } else if (levelId <= 10) { // Orange
+                bgColor = '#FFF3E0'; 
+                cardBackBg = 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)';
+                headerBg = 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)';
+            } else if (levelId <= 12) { // Teal
+                bgColor = '#E0F2F1'; 
+                cardBackBg = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)';
+                headerBg = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)';
+            } else { // Red/Rose (L13-15)
+                bgColor = '#FFEBEE'; 
+                cardBackBg = 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)';
+                headerBg = 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)';
+            }
+
+            document.documentElement.style.setProperty('--bg-color', bgColor);
+            document.documentElement.style.setProperty('--card-back-bg', cardBackBg);
+            mainHeader.style.background = headerBg;
         }
 
         function startTimer() {
@@ -657,29 +708,25 @@
                 const delta = Math.floor((Date.now() - startTime) / 1000);
                 const m = String(Math.floor(delta / 60)).padStart(2, '0');
                 const s = String(delta % 60).padStart(2, '0');
-                dispTime.textContent = `${m}:${s}`;
+                document.getElementById('time-disp').textContent = `${m}:${s}`;
             }, 1000);
         }
 
-        function updateDisplay() {
-            dispLevel.textContent = currentLevelId;
-            dispMoves.textContent = moves;
-        }
-
-        // --- AUDIO / TTS ---
+        // --- TTS & AUDIO ---
         function speak(text, callback) {
             speechSynth.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
+            // TTS FIX: Convert to Lowercase/Sentence case to prevent spelling out
+            const textToSpeak = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+            
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.lang = 'en-US';
             utterance.rate = 0.9;
             utterance.onend = () => { if(callback) callback(); };
-            utterance.onerror = () => { if(callback) callback(); };
+            utterance.onerror = () => { if(callback) callback(); }; // Proceed even if error
             speechSynth.speak(utterance);
         }
 
-        // Simple Beeps using Web Audio API (No external files needed)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
         function playTone(freq, type, duration) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
@@ -693,15 +740,12 @@
             osc.start();
             osc.stop(audioCtx.currentTime + duration);
         }
-
-        function playTickSound() { playTone(600, 'sine', 0.1); }
         function playSuccessSound() { 
             playTone(800, 'sine', 0.1); 
             setTimeout(() => playTone(1200, 'sine', 0.2), 100);
         }
         function playErrorSound() { playTone(200, 'sawtooth', 0.3); }
 
-        // Start
         init();
     </script>
 </body>
